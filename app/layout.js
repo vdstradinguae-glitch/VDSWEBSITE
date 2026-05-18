@@ -1,18 +1,12 @@
-import { Inter, Fraunces } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
 
-const inter = Inter({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-sans',
-});
-
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-display',
-  axes: ['SOFT', 'WONK', 'opsz'],
+  weight: ['300', '400', '500', '600', '700', '800'],
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://vdsdxb.ae';
@@ -78,7 +72,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: '#F5EFE3',
+  themeColor: '#ffffff',
   width: 'device-width',
   initialScale: 1,
 };
@@ -126,7 +120,7 @@ const organizationJsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable}`} suppressHydrationWarning>
+    <html lang="en" className={jakarta.variable} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
@@ -135,7 +129,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
       </head>
-      <body className="bg-paper text-ink antialiased font-sans selection:bg-gold/30 selection:text-ink">
+      <body className="bg-white text-navy antialiased font-sans">
         {children}
         <Toaster theme="light" richColors position="top-center" />
       </body>

@@ -9,33 +9,36 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: '2rem',
+      padding: '1.5rem',
       screens: { '2xl': '1400px' },
     },
     extend: {
       colors: {
-        // Editorial luxury palette
-        paper: '#F5EFE3',
-        cream: '#FAF6EC',
-        bone: '#ECE3D0',
-        ink: '#14110D',
-        forest: {
-          DEFAULT: '#0F2A1F',
-          deep: '#0A1F17',
-          800: '#163525',
-          600: '#214332',
+        navy: {
+          DEFAULT: '#0F172A',
+          50: '#F8FAFC',
+          100: '#F1F5F9',
+          200: '#E2E8F0',
+          300: '#CBD5E1',
+          400: '#94A3B8',
+          500: '#64748B',
+          600: '#475569',
+          700: '#334155',
+          800: '#1E293B',
+          900: '#0F172A',
+          950: '#0B1322',
         },
-        gold: {
-          DEFAULT: '#B58B3F',
-          light: '#D9B36A',
-          dark: '#8A6624',
+        sand: '#F5F3EE',
+        offwhite: '#F7F8FA',
+        accent: {
+          DEFAULT: '#F59E0B', // amber gold
+          50: '#FFFBEB',
+          100: '#FEF3C7',
+          400: '#FBBF24',
+          500: '#F59E0B',
+          600: '#D97706',
         },
-        clay: '#B5694A',
-        stone: {
-          DEFAULT: '#5A554A',
-          light: '#A8A39A',
-        },
-        // shadcn tokens
+        // shadcn
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -57,10 +60,6 @@ module.exports = {
           DEFAULT: 'hsl(var(--muted))',
           foreground: 'hsl(var(--muted-foreground))',
         },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))',
@@ -76,12 +75,7 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-display)', 'Georgia', 'serif'],
-      },
-      letterSpacing: {
-        wider: '0.05em',
-        widest: '0.25em',
+        sans: ['var(--font-sans)', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
     },
   },

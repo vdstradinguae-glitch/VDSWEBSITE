@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowUpRight,
   ArrowRight,
@@ -10,9 +10,26 @@ import {
   MapPin,
   Menu,
   X,
-  Plus,
+  Check,
+  Sprout,
+  HeartPulse,
+  Bot,
+  Search,
+  Boxes,
+  Ship,
+  ShieldCheck,
+  Globe2,
+  Building2,
+  Award,
+  Quote,
+  ChevronLeft,
+  ChevronRight,
+  Facebook,
+  Linkedin,
+  Twitter,
+  Youtube,
+  PhoneCall,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -26,166 +43,39 @@ import { toast } from 'sonner';
 
 const AI_EXTERNAL_URL = 'https://www.talkbotagent.com';
 
-/* ============================================================
-   SHARED EDITORIAL ELEMENTS
-   ============================================================ */
-const Eyebrow = ({ children, tone = 'gold' }) => (
-  <div
-    className={`flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.28em] ${
-      tone === 'gold' ? 'text-gold-dark' : 'text-paper/70'
-    }`}
-  >
-    <span
-      className={`h-px w-10 ${tone === 'gold' ? 'bg-gold' : 'bg-paper/40'}`}
-    />
-    {children}
+/* =========================================================
+   TOP UTILITY BAR
+   ========================================================= */
+const TopBar = () => (
+  <div className="hidden border-b border-navy-200 bg-white text-[12px] text-navy-600 md:block">
+    <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-2.5 lg:px-10">
+      <div className="flex items-center gap-6">
+        <a href="mailto:sales@vdsdxb.ae" className="flex items-center gap-2 hover:text-navy">
+          <Mail className="h-3.5 w-3.5" /> sales@vdsdxb.ae
+        </a>
+        <span className="h-3 w-px bg-navy-200" />
+        <a href="tel:+971542695401" className="flex items-center gap-2 hover:text-navy">
+          <Phone className="h-3.5 w-3.5" /> +971 54 269 5401
+        </a>
+      </div>
+      <div className="flex items-center gap-5">
+        <span className="flex items-center gap-2">
+          <MapPin className="h-3.5 w-3.5" /> Dubai, UAE
+        </span>
+        <span className="h-3 w-px bg-navy-200" />
+        <div className="flex items-center gap-3 text-navy-500">
+          <a href="#" aria-label="LinkedIn" className="hover:text-navy"><Linkedin className="h-3.5 w-3.5" /></a>
+          <a href="#" aria-label="Twitter" className="hover:text-navy"><Twitter className="h-3.5 w-3.5" /></a>
+          <a href="#" aria-label="Facebook" className="hover:text-navy"><Facebook className="h-3.5 w-3.5" /></a>
+        </div>
+      </div>
+    </div>
   </div>
 );
 
-const SectionNumber = ({ n }) => (
-  <span className="font-display text-sm italic tracking-wide text-gold-dark">
-    {n}
-  </span>
-);
-
-/* ============================================================
-   HERO ORNAMENT — rotating gold wireframe globe / compass
-   ============================================================ */
-const HeroOrnament = () => {
-  return (
-    <div className="relative mx-auto aspect-square w-full max-w-[520px]">
-      {/* Outer ring with serial marks */}
-      <div className="absolute inset-0 animate-slow-spin">
-        <svg viewBox="0 0 400 400" className="h-full w-full">
-          <defs>
-            <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="60%" stopColor="#B58B3F" stopOpacity="0" />
-              <stop offset="100%" stopColor="#B58B3F" stopOpacity="0.5" />
-            </radialGradient>
-          </defs>
-          <circle cx="200" cy="200" r="198" fill="none" stroke="#B58B3F" strokeOpacity="0.4" strokeWidth="0.6" />
-          <circle cx="200" cy="200" r="190" fill="none" stroke="#B58B3F" strokeOpacity="0.25" strokeWidth="0.4" />
-          {/* tick marks */}
-          {Array.from({ length: 60 }).map((_, i) => {
-            const a = (i * 6 * Math.PI) / 180;
-            const r1 = 198;
-            const r2 = i % 5 === 0 ? 182 : 190;
-            const x1 = 200 + Math.cos(a) * r1;
-            const y1 = 200 + Math.sin(a) * r1;
-            const x2 = 200 + Math.cos(a) * r2;
-            const y2 = 200 + Math.sin(a) * r2;
-            return (
-              <line
-                key={i}
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                stroke="#B58B3F"
-                strokeOpacity={i % 5 === 0 ? 0.85 : 0.4}
-                strokeWidth={i % 5 === 0 ? 1 : 0.5}
-              />
-            );
-          })}
-          {/* cardinal labels */}
-          {[
-            ['N', 200, 18],
-            ['E', 384, 204],
-            ['S', 200, 392],
-            ['W', 16, 204],
-          ].map(([t, x, y]) => (
-            <text
-              key={t}
-              x={x}
-              y={y}
-              fill="#B58B3F"
-              fontSize="11"
-              fontFamily="serif"
-              fontStyle="italic"
-              textAnchor="middle"
-              dominantBaseline="middle"
-            >
-              {t}
-            </text>
-          ))}
-        </svg>
-      </div>
-
-      {/* Wireframe globe */}
-      <div className="absolute inset-12 animate-slow-spin-rev">
-        <svg viewBox="0 0 320 320" className="h-full w-full">
-          <defs>
-            <radialGradient id="globeGrad" cx="35%" cy="35%" r="65%">
-              <stop offset="0%" stopColor="#163525" />
-              <stop offset="55%" stopColor="#0A1F17" />
-              <stop offset="100%" stopColor="#06140E" />
-            </radialGradient>
-            <linearGradient id="goldStroke" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0%" stopColor="#D9B36A" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#8A6624" stopOpacity="0.4" />
-            </linearGradient>
-          </defs>
-          <circle cx="160" cy="160" r="155" fill="url(#globeGrad)" />
-          {/* longitudes */}
-          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-            <ellipse
-              key={`v${i}`}
-              cx="160"
-              cy="160"
-              rx={Math.max(8, 155 - i * 24)}
-              ry="155"
-              fill="none"
-              stroke="url(#goldStroke)"
-              strokeWidth="0.5"
-            />
-          ))}
-          {/* latitudes */}
-          {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-            <ellipse
-              key={`h${i}`}
-              cx="160"
-              cy="160"
-              rx="155"
-              ry={(i + 1) * 18}
-              fill="none"
-              stroke="url(#goldStroke)"
-              strokeWidth="0.4"
-            />
-          ))}
-          {/* continent dots */}
-          {[
-            [180, 110],
-            [200, 140],
-            [165, 145],
-            [220, 165],
-            [120, 175],
-            [195, 200],
-            [170, 220],
-            [140, 200],
-            [240, 195],
-          ].map(([cx, cy], i) => (
-            <circle key={i} cx={cx} cy={cy} r="2.4" fill="#D9B36A" opacity="0.9" />
-          ))}
-          {/* Dubai marker (pulsing) */}
-          <g>
-            <circle cx="195" cy="155" r="14" fill="#B58B3F" opacity="0.15">
-              <animate attributeName="r" values="8;22;8" dur="2.4s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0.35;0;0.35" dur="2.4s" repeatCount="indefinite" />
-            </circle>
-            <circle cx="195" cy="155" r="3.6" fill="#D9B36A" />
-          </g>
-        </svg>
-      </div>
-
-      {/* Subtle outer halo */}
-      <div className="pointer-events-none absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(circle,rgba(181,139,63,0.25),transparent_60%)] blur-2xl" />
-    </div>
-  );
-};
-
-/* ============================================================
-   NAVBAR — slim, editorial
-   ============================================================ */
+/* =========================================================
+   NAVBAR — dark navy with pill CTA
+   ========================================================= */
 const Nav = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -198,6 +88,7 @@ const Nav = () => {
 
   const links = [
     { href: '#about', label: 'About' },
+    { href: '#verticals', label: 'Verticals' },
     { href: '#agro', label: 'Agro' },
     { href: '#healthcare', label: 'Healthcare' },
     { href: AI_EXTERNAL_URL, label: 'AI Agents', external: true },
@@ -206,57 +97,53 @@ const Nav = () => {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'border-b border-ink/10 bg-paper/85 backdrop-blur-xl text-ink'
-          : 'bg-transparent text-paper'
+      className={`sticky top-0 z-50 bg-navy-900 transition-shadow ${
+        scrolled ? 'shadow-xl shadow-navy-900/20' : ''
       }`}
       aria-label="Site header"
     >
-      <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 lg:px-10">
-        <a href="#top" className="group flex items-baseline gap-2.5">
-          <span className="font-display text-2xl font-semibold tracking-tight">
-            VDS
-          </span>
-          <span
-            className={`hidden text-[10px] uppercase tracking-[0.32em] sm:inline ${
-              scrolled ? 'text-stone' : 'text-paper/70'
-            }`}
-          >
-            · General Trading LLC
-          </span>
+      <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
+        <a href="#top" className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white">
+            <span className="font-extrabold text-navy-900">V</span>
+          </div>
+          <div className="leading-tight">
+            <div className="text-lg font-bold text-white">VDS</div>
+            <div className="text-[10px] uppercase tracking-mid text-navy-300">
+              General Trading
+            </div>
+          </div>
         </a>
 
-        <ul className="hidden items-center gap-8 md:flex">
+        <ul className="hidden items-center gap-8 lg:flex">
           {links.map((l) => (
             <li key={l.label}>
               <a
                 href={l.href}
                 target={l.external ? '_blank' : undefined}
                 rel={l.external ? 'noopener noreferrer' : undefined}
-                className="group relative inline-flex items-center gap-1 text-[13px] font-medium tracking-wide transition hover:text-gold-dark"
+                className="group inline-flex items-center gap-1 text-[14px] font-medium text-white/85 transition hover:text-white"
               >
                 {l.label}
-                {l.external && <ArrowUpRight className="h-3 w-3 opacity-70" />}
-                <span className="absolute -bottom-1 left-0 right-0 h-px origin-left scale-x-0 bg-gold transition-transform duration-500 group-hover:scale-x-100" />
+                {l.external && <ArrowUpRight className="h-3.5 w-3.5 text-accent" />}
               </a>
             </li>
           ))}
         </ul>
 
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <a
             href="#contact"
-            className="group inline-flex items-center gap-2 rounded-full border border-current px-5 py-2 text-[12px] font-medium uppercase tracking-[0.18em] transition hover:bg-current hover:text-paper"
+            className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-navy-900 transition hover:bg-accent hover:text-white"
           >
-            <span className="transition group-hover:text-paper">Enquire</span>
-            <ArrowUpRight className="h-3.5 w-3.5 transition group-hover:text-paper" />
+            Book a Meeting
+            <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
         </div>
 
         <button
           aria-label="Toggle menu"
-          className="rounded-md p-2 md:hidden"
+          className="rounded-md p-2 text-white lg:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -269,27 +156,32 @@ const Nav = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-ink/10 bg-paper text-ink md:hidden"
+            className="overflow-hidden border-t border-navy-800 bg-navy-900 lg:hidden"
           >
-            <ul className="flex flex-col px-6 py-4">
+            <ul className="px-6 py-3">
               {links.map((l) => (
-                <li key={l.label} className="border-b border-ink/10 last:border-0">
+                <li key={l.label} className="border-b border-navy-800 last:border-0">
                   <a
                     href={l.href}
                     target={l.external ? '_blank' : undefined}
                     rel={l.external ? 'noopener noreferrer' : undefined}
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-between py-4 text-base"
+                    className="flex items-center justify-between py-4 text-white"
                   >
                     <span>{l.label}</span>
-                    {l.external ? (
-                      <ArrowUpRight className="h-4 w-4 text-gold-dark" />
-                    ) : (
-                      <Plus className="h-4 w-4 opacity-40" />
-                    )}
+                    <ArrowUpRight className={`h-4 w-4 ${l.external ? 'text-accent' : 'text-navy-400'}`} />
                   </a>
                 </li>
               ))}
+              <li className="pt-4">
+                <a
+                  href="#contact"
+                  onClick={() => setOpen(false)}
+                  className="block rounded-full bg-white px-6 py-3 text-center text-sm font-semibold text-navy-900"
+                >
+                  Book a Meeting
+                </a>
+              </li>
             </ul>
           </motion.div>
         )}
@@ -298,340 +190,375 @@ const Nav = () => {
   );
 };
 
-/* ============================================================
-   HERO — dark forest, serif display, gold ornament on right
-   ============================================================ */
-const Hero = () => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start', 'end start'] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, -60]);
+/* =========================================================
+   COMMON UI
+   ========================================================= */
+const Eyebrow = ({ children, tone = 'dark' }) => (
+  <div
+    className={`inline-flex items-center gap-2 rounded-md border px-4 py-2 text-[11px] font-bold uppercase tracking-mid ${
+      tone === 'dark'
+        ? 'border-navy-200 bg-white text-navy-900'
+        : 'border-white/15 bg-white/5 text-white/85'
+    }`}
+  >
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M12 2L14.39 8.26L21 9.27L16 13.97L17.5 20.5L12 17.27L6.5 20.5L8 13.97L3 9.27L9.61 8.26L12 2Z" fill="#F59E0B" />
+    </svg>
+    {children}
+  </div>
+);
 
+const PillBtn = ({ children, href, variant = 'dark', external, className = '' }) => {
+  const base =
+    'group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold transition';
+  const styles = {
+    dark: 'bg-navy-900 text-white hover:bg-accent hover:text-white',
+    light: 'bg-white text-navy-900 hover:bg-accent hover:text-white border border-navy-200',
+    accent: 'bg-accent text-white hover:bg-navy-900',
+    outline: 'border border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white',
+  };
   return (
-    <section
-      ref={ref}
-      id="top"
-      className="relative isolate min-h-[100vh] overflow-hidden bg-forest-deep text-paper grain"
+    <a
+      href={href}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+      className={`${base} ${styles[variant]} ${className}`}
     >
-      {/* background photograph layer */}
-      <div
-        className="absolute inset-0 -z-10 bg-cover bg-center opacity-[0.18]"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1661756977826-c66970f2a2cb?w=1800&q=80')",
-        }}
-      />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-forest-deep/85 via-forest-deep/95 to-forest-deep" />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_20%_30%,rgba(181,139,63,0.18),transparent_70%)]" />
+      {children}
+      <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+    </a>
+  );
+};
 
-      <Nav />
+const SectionTitle = ({ eyebrow, title, accent, center, tone = 'dark', children }) => (
+  <div className={center ? 'mx-auto max-w-3xl text-center' : ''}>
+    <Eyebrow tone={tone}>{eyebrow}</Eyebrow>
+    <h2
+      className={`mt-5 text-[clamp(2rem,4.4vw,3.4rem)] font-extrabold leading-[1.1] text-spread ${
+        tone === 'dark' ? 'text-navy-900' : 'text-white'
+      }`}
+    >
+      {title}
+      {accent && (
+        <>
+          {' '}
+          <span className="text-accent">{accent}</span>
+        </>
+      )}
+    </h2>
+    {children}
+  </div>
+);
 
-      <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-16 px-6 pb-24 pt-36 lg:grid-cols-[1.1fr,1fr] lg:gap-20 lg:px-10 lg:pt-44">
-        <motion.div style={{ y }} className="relative">
-          <Eyebrow tone="paper">UAE-Registered · Est. Dubai</Eyebrow>
+/* =========================================================
+   HERO — Bold heading + image collage with floating stat
+   ========================================================= */
+const Hero = () => {
+  return (
+    <section id="top" className="relative overflow-hidden bg-white pt-10 lg:pt-16">
+      {/* Decorative background grid */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_10%_0%,#FEF3C7,transparent_60%)]" />
+      <div className="pointer-events-none absolute right-0 top-0 -z-10 h-[520px] w-[520px] rounded-full bg-navy-100/60 blur-3xl" />
 
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 font-display text-[clamp(2.6rem,7vw,5.6rem)] font-light leading-[1.02] tracking-[-0.02em] text-paper"
-          >
-            Trading{' '}
-            <span className="italic text-gradient-gold">excellence</span>
-            <br />
-            across continents.
-          </motion.h1>
+      <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-14 px-6 pb-24 lg:grid-cols-[1.05fr,1fr] lg:gap-20 lg:px-10 lg:pb-32">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="relative"
+        >
+          <Eyebrow>Trading Excellence Since Dubai</Eyebrow>
+          <h1 className="mt-6 text-[clamp(2.5rem,6vw,5rem)] font-extrabold leading-[1.02] text-navy-900 text-spread">
+            Trading <span className="text-accent">Excellence</span>
+            <br /> Across Continents
+          </h1>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-navy-600">
+            From wholesale agricultural commodities and MOHAP-compliant medical equipment
+            to AI-powered automation agents — VDS General Trading LLC connects producers,
+            hospitals and enterprises across the GCC, Africa and the CIS.
+          </p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.15 }}
-            className="mt-8 max-w-xl text-base leading-[1.7] text-paper/75 sm:text-lg"
-          >
-            A Dubai trading house operating across three carefully chosen verticals —
-            agricultural commodities, regulated medical equipment, and AI automation. One
-            entity. One standard. Three continents.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.3 }}
-            className="mt-10 flex flex-wrap items-center gap-4"
-          >
+          <div className="mt-9 flex flex-wrap items-center gap-4">
+            <PillBtn href="#verticals" variant="dark">
+              View Verticals
+            </PillBtn>
             <a
-              href="#agro"
-              className="group inline-flex items-center gap-3 bg-gold px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.22em] text-forest-deep transition hover:bg-gold-light"
+              href="tel:+971542695401"
+              className="group inline-flex items-center gap-3 text-sm font-semibold text-navy-900"
             >
-              Explore Agro
-              <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-navy-200 transition group-hover:border-accent group-hover:bg-accent group-hover:text-white">
+                <PhoneCall className="h-5 w-5" />
+              </span>
+              <span>
+                <span className="block text-[11px] font-medium uppercase tracking-mid text-navy-500">
+                  Call us anytime
+                </span>
+                <span className="block text-base">+971 54 269 5401</span>
+              </span>
             </a>
-            <a
-              href="#healthcare"
-              className="group inline-flex items-center gap-3 border border-paper/30 px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.22em] text-paper transition hover:border-paper hover:bg-paper hover:text-forest-deep"
-            >
-              Explore Healthcare
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-            <a
-              href={AI_EXTERNAL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-3 text-[12px] font-medium uppercase tracking-[0.22em] text-paper/80 underline decoration-gold underline-offset-[6px] transition hover:text-gold-light"
-            >
-              Explore AI Agents
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-          </motion.div>
+          </div>
 
-          {/* Stat strip */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.6 }}
-            className="mt-14 grid max-w-lg grid-cols-3 divide-x divide-paper/15 border-y border-paper/15 py-6 text-paper"
-          >
-            {[
-              ['III', 'Verticals'],
-              ['20+', 'Countries'],
-              ['24·7', 'Operations'],
-            ].map(([n, l]) => (
-              <div key={l} className="px-4 text-center first:pl-0 last:pr-0">
-                <div className="font-display text-3xl font-light tracking-tight">{n}</div>
-                <div className="mt-1 text-[10px] uppercase tracking-[0.28em] text-paper/55">
-                  {l}
-                </div>
-              </div>
-            ))}
-          </motion.div>
+          {/* trust strip */}
+          <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-navy-100 pt-8 text-[12px] uppercase tracking-mid text-navy-500">
+            <div className="flex items-center gap-2"><Check className="h-4 w-4 text-accent" /> UAE-Registered LLC</div>
+            <div className="flex items-center gap-2"><Check className="h-4 w-4 text-accent" /> MOHAP-Compliant</div>
+            <div className="flex items-center gap-2"><Check className="h-4 w-4 text-accent" /> Jebel Ali Logistics</div>
+          </div>
         </motion.div>
 
+        {/* Image collage */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-          className="relative flex items-center justify-center"
+          transition={{ duration: 0.9 }}
+          className="relative flex justify-center lg:justify-end"
         >
-          <HeroOrnament />
-        </motion.div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.32em] text-paper/40">
-        <div className="flex flex-col items-center gap-2">
-          <span>Scroll</span>
-          <span className="h-10 w-px bg-paper/30" />
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ============================================================
-   ABOUT — editorial 2-column, numbered, cream
-   ============================================================ */
-const About = () => {
-  return (
-    <section id="about" className="relative scroll-mt-20 bg-paper py-28 sm:py-36">
-      <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        <div className="flex items-center justify-between">
-          <Eyebrow>I — About</Eyebrow>
-          <div className="hidden text-[11px] uppercase tracking-[0.28em] text-stone sm:block">
-            Est. Dubai · UAE
-          </div>
-        </div>
-
-        <div className="mt-12 grid grid-cols-1 gap-14 lg:grid-cols-[1.1fr,1fr] lg:gap-20">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.9 }}
-          >
-            <h2 className="font-display text-[clamp(2rem,4.5vw,3.8rem)] font-light leading-[1.05] tracking-[-0.015em] text-ink">
-              A trading house, in the{' '}
-              <span className="italic text-gold-dark">classical sense</span>{' '}
-              — re-engineered for global commerce.
-            </h2>
-            <p className="mt-8 max-w-xl text-[17px] leading-[1.75] text-ink/75">
-              VDS General Trading LLC is a UAE-registered limited liability company,
-              headquartered in Dubai. We operate at the intersection of physical commodities,
-              regulated medical supply chains, and emerging AI technology — giving our
-              partners a single, accountable, multi-vertical operator.
-            </p>
-            <p className="mt-5 max-w-xl text-[15px] leading-[1.75] text-stone">
-              Our mandate is to build dependable trade corridors between producers, hospitals,
-              distributors and enterprises across the GCC, Africa, and the CIS — through
-              transparent contracting, regulated execution, and quiet professionalism.
-            </p>
-
-            <div className="mt-10 inline-flex items-center gap-3 text-[12px] uppercase tracking-[0.24em] text-ink">
-              <span className="h-px w-8 bg-gold" />
-              Headquartered in Dubai, UAE
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.9, delay: 0.1 }}
-            className="relative"
-          >
-            <div className="ornament-frame relative overflow-hidden">
+          <div className="relative grid w-full max-w-[560px] grid-cols-5 grid-rows-6 gap-4">
+            <div className="relative col-span-3 row-span-4 overflow-hidden rounded-[2rem]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1100&q=85"
-                alt="Aerial view of Dubai, headquarters of VDS General Trading LLC"
-                loading="lazy"
-                className="h-[520px] w-full object-cover grayscale-[15%]"
+                src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900&q=85"
+                alt="Aerial view of Dubai — VDS General Trading headquarters"
+                className="h-full w-full object-cover"
               />
             </div>
-            <div className="mt-6 flex items-start justify-between border-t border-ink/15 pt-4">
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.28em] text-stone">
-                  Plate I
+            <div className="relative col-span-2 row-span-3 col-start-4 overflow-hidden rounded-[2rem]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1605732562742-3023a888e56e?w=600&q=85"
+                alt="Shipping containers at Jebel Ali port"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="relative col-span-2 row-span-3 col-start-4 row-start-4 overflow-hidden rounded-[2rem] bg-navy-900 p-6 text-white">
+              <div className="flex h-full flex-col justify-between">
+                <div className="text-7xl font-extrabold leading-none">20<span className="text-accent">+</span></div>
+                <div>
+                  <div className="text-sm font-semibold">Countries Served</div>
+                  <div className="text-xs text-navy-300">GCC · Africa · CIS</div>
                 </div>
-                <div className="mt-1 font-display text-lg italic text-ink">Dubai · The crossroads.</div>
               </div>
-              <div className="font-display text-sm text-gold-dark">— 25° N</div>
+              <div className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-accent/20 blur-2xl" />
+            </div>
+            <div className="relative col-span-3 row-span-2 row-start-5 overflow-hidden rounded-[2rem]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1597362925123-77861d3fbac7?w=700&q=85"
+                alt="Fresh agricultural produce for export"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Floating badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.4 }}
+            className="absolute -left-6 bottom-12 hidden rounded-2xl bg-white p-5 shadow-2xl shadow-navy-900/10 ring-1 ring-navy-100 sm:flex sm:items-center sm:gap-4"
+          >
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent/15 text-accent">
+              <Award className="h-6 w-6" />
+            </div>
+            <div>
+              <div className="text-[11px] uppercase tracking-mid text-navy-500">UAE</div>
+              <div className="text-lg font-bold text-navy-900">Registered LLC</div>
+              <div className="text-xs text-navy-500">Dubai · UAE</div>
             </div>
           </motion.div>
-        </div>
-
-        {/* Differentiators row */}
-        <div className="mt-20 grid grid-cols-1 gap-px overflow-hidden border border-ink/15 bg-ink/15 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            ['UAE LLC', 'Compliant, accountable Dubai entity.'],
-            ['Tri-Continental', 'GCC · Africa · CIS corridors.'],
-            ['MOHAP-Aligned', 'Healthcare regulation & traceability.'],
-            ['Jebel Ali', 'Consolidation & re-export ready.'],
-          ].map(([t, d], i) => (
-            <div key={t} className="bg-paper p-6 sm:p-8">
-              <div className="mb-3 font-display text-xs italic text-gold-dark">
-                {`0${i + 1}`}
-              </div>
-              <div className="font-display text-xl text-ink">{t}</div>
-              <div className="mt-2 text-sm leading-relaxed text-stone">{d}</div>
-            </div>
-          ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-/* ============================================================
-   VERTICALS — editorial 3-card with numerals
-   ============================================================ */
+/* =========================================================
+   ABOUT — image stack with floating stat + content right
+   ========================================================= */
+const About = () => {
+  return (
+    <section id="about" className="relative scroll-mt-20 bg-offwhite py-24 lg:py-32">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-14 px-6 lg:grid-cols-2 lg:gap-20 lg:px-10">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.8 }}
+          className="relative"
+        >
+          <div className="grid grid-cols-2 gap-4">
+            <div className="overflow-hidden rounded-[2rem]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1661756977826-c66970f2a2cb?w=600&q=85"
+                alt="Cargo port operations at golden hour"
+                className="h-[420px] w-full object-cover"
+              />
+            </div>
+            <div className="mt-12 overflow-hidden rounded-[2rem]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=600&q=85"
+                alt="Medical equipment supply"
+                className="h-[420px] w-full object-cover"
+              />
+            </div>
+          </div>
+          {/* Floating stat */}
+          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 rounded-2xl bg-navy-900 p-6 text-white shadow-2xl shadow-navy-900/30">
+            <div className="text-5xl font-extrabold leading-none text-accent">III</div>
+            <div className="mt-2 text-[11px] uppercase tracking-mid text-navy-300">Business Verticals</div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+        >
+          <Eyebrow>About VDS Trading</Eyebrow>
+          <h2 className="mt-5 text-[clamp(2rem,4.4vw,3.4rem)] font-extrabold leading-[1.1] text-navy-900 text-spread">
+            A Dubai trading house{' '}
+            <span className="text-accent">built for global commerce.</span>
+          </h2>
+          <p className="mt-6 text-lg leading-relaxed text-navy-600">
+            VDS General Trading LLC is a UAE-registered limited liability company,
+            headquartered in Dubai. We operate at the intersection of physical commodities,
+            regulated medical supply chains, and emerging AI technology — giving partners
+            a single, accountable, multi-vertical operator.
+          </p>
+
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {[
+              { icon: Building2, t: 'UAE-Registered', d: 'Accountable Dubai LLC entity.' },
+              { icon: Globe2, t: 'Global Reach', d: 'Active trade in 3 continents.' },
+              { icon: ShieldCheck, t: 'Compliance First', d: 'MOHAP-aligned supply.' },
+              { icon: Ship, t: 'Jebel Ali', d: 'Consolidation & re-export.' },
+            ].map(({ icon: Icon, t, d }) => (
+              <div key={t} className="flex items-start gap-4 rounded-2xl border border-navy-100 bg-white p-5">
+                <div className="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-accent/15 text-accent">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="font-bold text-navy-900">{t}</div>
+                  <div className="text-sm text-navy-500">{d}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center gap-6">
+            <PillBtn href="#contact" variant="dark">About Us</PillBtn>
+            <a href="tel:+971542695401" className="group flex items-center gap-3 text-navy-900">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-white">
+                <PhoneCall className="h-5 w-5" />
+              </span>
+              <div>
+                <div className="text-xs text-navy-500">Call us anytime</div>
+                <div className="font-bold">+971 54 269 5401</div>
+              </div>
+            </a>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+/* =========================================================
+   VERTICALS — Invena-style horizontal list rows
+   ========================================================= */
 const Verticals = () => {
   const items = [
     {
       key: 'agro',
-      numeral: 'I',
+      icon: Sprout,
       title: 'Agro Trading',
-      kicker: 'Commodities',
-      desc:
-        'Wholesale and re-export of agricultural commodities — onion, potato, garlic and broader produce — to the GCC, Africa and CIS.',
+      desc: 'Wholesale and re-export of onion, potato, garlic and broader agricultural commodities to the GCC, Africa and CIS markets.',
       href: '#agro',
       external: false,
-      image:
-        'https://images.unsplash.com/photo-1678954157605-38cc2f12c780?w=900&q=85',
     },
     {
       key: 'healthcare',
-      numeral: 'II',
-      title: 'Healthcare',
-      kicker: 'Regulated Supply',
-      desc:
-        'MOHAP-compliant medical equipment trading, supply and distribution to hospitals, clinics and medical distributors across the UAE.',
+      icon: HeartPulse,
+      title: 'Healthcare Equipment',
+      desc: 'MOHAP-compliant medical equipment trading and distribution to hospitals, clinics and medical distributors across the UAE.',
       href: '#healthcare',
       external: false,
-      image:
-        'https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=900&q=85',
     },
     {
       key: 'ai',
-      numeral: 'III',
+      icon: Bot,
       title: 'AI Agents & Automation',
-      kicker: 'Technology',
-      desc:
-        'AI-powered voice and email automation that runs your inbound calls, leads and customer operations — twenty-four hours, every day.',
+      desc: 'AI-powered voice and email automation that runs your inbound calls, leads and customer operations — 24/7.',
       href: AI_EXTERNAL_URL,
       external: true,
-      image:
-        'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=900&q=85',
     },
   ];
 
   return (
-    <section className="relative bg-bone py-28 sm:py-36">
+    <section id="verticals" className="bg-white py-24 lg:py-32">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        <div className="flex items-center justify-between">
-          <Eyebrow>II — Verticals</Eyebrow>
-          <span className="hidden text-[11px] uppercase tracking-[0.28em] text-stone sm:inline">
-            Three pillars · One operator
-          </span>
-        </div>
+        <SectionTitle eyebrow="Our Verticals" title="Three pillars," accent="one trusted partner." center />
+        <p className="mx-auto mt-5 max-w-2xl text-center text-base text-navy-500">
+          Each vertical operates with its own dedicated team — while sharing the same UAE
+          governance, logistics network and global reach.
+        </p>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mt-10 max-w-3xl font-display text-[clamp(2rem,4.5vw,3.6rem)] font-light leading-[1.05] tracking-[-0.015em] text-ink"
-        >
-          Three carefully chosen verticals. <span className="italic text-gold-dark">One signature</span> of execution.
-        </motion.h2>
-
-        <div className="mt-16 grid grid-cols-1 gap-px overflow-hidden border border-ink/15 bg-ink/15 md:grid-cols-3">
+        <div className="mt-14 space-y-4">
           {items.map((it, i) => (
             <motion.a
               key={it.key}
               href={it.href}
               target={it.external ? '_blank' : undefined}
               rel={it.external ? 'noopener noreferrer' : undefined}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.7, delay: i * 0.12 }}
-              className="group relative flex flex-col bg-paper p-8 transition-colors duration-500 hover:bg-cream sm:p-10"
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="group relative grid grid-cols-1 items-center gap-6 overflow-hidden rounded-3xl bg-offwhite p-6 transition-colors duration-500 hover:bg-navy-900 sm:grid-cols-[auto,1.4fr,2fr,auto] sm:gap-8 sm:p-8"
             >
-              <div className="flex items-baseline justify-between">
-                <span className="font-display text-4xl italic text-gold-dark">
-                  {it.numeral}
-                </span>
-                <span className="text-[10px] uppercase tracking-[0.28em] text-stone">
-                  {it.kicker}
-                </span>
+              {/* decorative pattern on hover */}
+              <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 opacity-0 transition-opacity duration-500 group-hover:opacity-100 sm:block">
+                <svg viewBox="0 0 400 200" className="h-full w-full">
+                  {Array.from({ length: 6 }).map((_, r) =>
+                    Array.from({ length: 12 }).map((_, c) => (
+                      <rect
+                        key={`${r}-${c}`}
+                        x={c * 36 + 6}
+                        y={r * 36 + 6}
+                        width="2"
+                        height="2"
+                        fill="#F59E0B"
+                        opacity="0.4"
+                      />
+                    ))
+                  )}
+                </svg>
               </div>
 
-              <div className="relative mt-8 overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={it.image}
-                  alt={`${it.title} — VDS General Trading`}
-                  loading="lazy"
-                  className="h-52 w-full object-cover grayscale-[20%] transition-all duration-700 group-hover:scale-[1.04] group-hover:grayscale-0"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-paper/40 via-transparent to-transparent" />
+              <div className="flex h-20 w-20 flex-none items-center justify-center rounded-2xl bg-white text-navy-900 transition-colors duration-500 group-hover:bg-accent group-hover:text-white">
+                <it.icon className="h-9 w-9" />
               </div>
 
-              <h3 className="mt-8 font-display text-3xl font-light text-ink">
-                {it.title}
-              </h3>
-              <p className="mt-3 flex-1 text-[15px] leading-relaxed text-stone">
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] font-bold uppercase tracking-mid text-navy-500 transition group-hover:text-accent">
+                  {`0${i + 1} · Vertical`}
+                </span>
+                <h3 className="text-2xl font-extrabold text-navy-900 transition-colors duration-500 group-hover:text-white sm:text-3xl">
+                  {it.title}
+                </h3>
+              </div>
+
+              <p className="max-w-xl text-base leading-relaxed text-navy-600 transition-colors duration-500 group-hover:text-navy-200">
                 {it.desc}
               </p>
 
-              <div className="mt-8 flex items-center justify-between border-t border-ink/15 pt-5">
-                <span className="text-[12px] font-medium uppercase tracking-[0.22em] text-ink transition group-hover:text-gold-dark">
-                  {it.external ? 'Visit Talkbot' : 'Learn more'}
+              <div className="flex flex-none items-center justify-end">
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-navy-900 text-white transition-all duration-500 group-hover:bg-accent group-hover:-rotate-12">
+                  {it.external ? <ArrowUpRight className="h-6 w-6" /> : <ArrowRight className="h-6 w-6" />}
                 </span>
-                <ArrowUpRight
-                  className={`h-5 w-5 ${
-                    it.external ? 'text-gold-dark' : 'text-ink'
-                  } transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5`}
-                />
               </div>
             </motion.a>
           ))}
@@ -641,138 +568,155 @@ const Verticals = () => {
   );
 };
 
-/* ============================================================
-   AGRO DETAIL — editorial with big moody photo
-   ============================================================ */
-const Agro = () => {
-  const products = [
-    'Onion',
-    'Potato',
-    'Garlic',
-    'Ginger',
-    'Pulses',
-    'Spices',
-    'Fresh Produce',
-    'Dry Grocery',
-  ];
-  const markets = ['GCC', 'East Africa', 'West Africa', 'CIS Region', 'South Asia'];
-
+/* =========================================================
+   CTA BANNER — Dark navy with photo background
+   ========================================================= */
+const CtaBanner = () => {
   return (
-    <section
-      id="agro"
-      className="relative scroll-mt-20 bg-paper py-28 sm:py-36"
-      aria-labelledby="agro-heading"
-    >
-      <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        <div className="flex items-center justify-between">
-          <Eyebrow>III — Agro Trading</Eyebrow>
-          <span className="hidden text-[11px] uppercase tracking-[0.28em] text-stone sm:inline">
-            Commodities · Re-Export
-          </span>
-        </div>
+    <section className="relative overflow-hidden bg-navy-900 py-20 text-white lg:py-24">
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-20"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1605732562742-3023a888e56e?w=1600&q=85')",
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-navy-900 via-navy-900/85 to-navy-900/30" />
+      <div className="relative mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-8 px-6 lg:flex-row lg:items-center lg:px-10">
+        <h3 className="max-w-3xl text-[clamp(1.6rem,3.5vw,2.6rem)] font-extrabold leading-tight text-spread">
+          Let&apos;s discuss how we can move your{' '}
+          <span className="text-accent">commodity, equipment</span> or AI requirement
+          forward.
+        </h3>
+        <a
+          href="#contact"
+          className="group inline-flex flex-none items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-bold text-navy-900 transition hover:bg-accent hover:text-white"
+        >
+          Let&apos;s Work Together
+          <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </a>
+      </div>
+    </section>
+  );
+};
 
-        <div className="mt-12 grid grid-cols-1 gap-14 lg:grid-cols-2 lg:gap-20">
+/* =========================================================
+   PROCESS — Easy 3 steps
+   ========================================================= */
+const Process = () => {
+  const steps = [
+    { icon: Search, n: '01', t: 'Inquiry & Discovery', d: 'Tell us your requirement, target market, volume and timeline. We respond in 24h.' },
+    { icon: Boxes, n: '02', t: 'Sourcing & Compliance', d: 'We source, grade, document and clear — agro produce or medical equipment.' },
+    { icon: Ship, n: '03', t: 'Delivery & Re-Export', d: 'Consolidation through Jebel Ali, shipped to GCC, Africa or CIS destinations.' },
+  ];
+  return (
+    <section className="bg-offwhite py-24 lg:py-32">
+      <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+        <SectionTitle eyebrow="How We Work" title="Three steps," accent="from inquiry to delivery." center />
+        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {steps.map((s, i) => (
+            <motion.div
+              key={s.n}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              className="relative rounded-3xl bg-white p-8 shadow-sm ring-1 ring-navy-100"
+            >
+              <div className="absolute -right-3 -top-3 rounded-xl bg-accent px-3 py-1 text-xs font-bold text-white">
+                Step {s.n}
+              </div>
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-navy-900 text-white">
+                <s.icon className="h-7 w-7" />
+              </div>
+              <h3 className="mt-6 text-2xl font-extrabold text-navy-900">{s.t}</h3>
+              <p className="mt-3 text-navy-600">{s.d}</p>
+              {i < steps.length - 1 && (
+                <div className="absolute -right-4 top-1/2 hidden h-px w-8 -translate-y-1/2 bg-navy-200 md:block" />
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* =========================================================
+   AGRO DETAIL — big image left + dark navy panel right (project-style)
+   ========================================================= */
+const AgroDetail = () => {
+  const products = ['Onion', 'Potato', 'Garlic', 'Ginger', 'Pulses', 'Spices', 'Fresh Produce', 'Dry Grocery'];
+  const markets = ['GCC', 'East Africa', 'West Africa', 'CIS', 'South Asia'];
+  return (
+    <section id="agro" className="scroll-mt-24 bg-white py-24 lg:py-32">
+      <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+        <SectionTitle eyebrow="Agro Vertical · 01" title="Wholesale & re-export of" accent="agricultural commodities." center />
+        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.9 }}
-            className="relative order-2 lg:order-1"
+            transition={{ duration: 0.8 }}
+            className="overflow-hidden rounded-[2.5rem]"
           >
-            <div className="ornament-frame relative overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1678954157605-38cc2f12c780?w=1200&q=85"
-                alt="Editorial photograph of fresh onions — agricultural commodity for export"
-                loading="lazy"
-                className="h-[600px] w-full object-cover"
-              />
-            </div>
-            <div className="mt-6 flex items-start justify-between border-t border-ink/15 pt-4">
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.28em] text-stone">
-                  Plate II
-                </div>
-                <div className="mt-1 font-display text-lg italic text-ink">
-                  Allium · The staple of trade.
-                </div>
-              </div>
-              <div className="font-display text-sm text-gold-dark">— FOB</div>
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://images.unsplash.com/photo-1597362925123-77861d3fbac7?w=1100&q=85"
+              alt="Wholesale agricultural commodities for export"
+              className="h-full max-h-[640px] w-full object-cover"
+            />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.9, delay: 0.1 }}
-            className="order-1 lg:order-2 lg:pt-8"
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="relative overflow-hidden rounded-[2.5rem] bg-navy-900 p-10 text-white lg:p-12"
           >
-            <h2
-              id="agro-heading"
-              className="font-display text-[clamp(1.9rem,4.2vw,3.4rem)] font-light leading-[1.05] tracking-[-0.015em] text-ink"
-            >
-              Wholesale & re-export of{' '}
-              <span className="italic text-gold-dark">premium agro</span>{' '}
-              commodities.
-            </h2>
-            <p className="mt-6 max-w-xl text-[16px] leading-[1.75] text-ink/75">
-              We supply distributors, retailers and re-exporters across the GCC, Africa and
-              CIS with consistent volumes, transparent grading, and Dubai-based consolidation
-              through Jebel Ali — under one accountable contract.
+            <Sprout className="h-10 w-10 text-accent" />
+            <h3 className="mt-6 text-3xl font-extrabold sm:text-4xl">
+              Premium agro commodities,{' '}
+              <span className="text-accent">Dubai-consolidated.</span>
+            </h3>
+            <p className="mt-4 text-navy-300">
+              We supply distributors, retailers and re-exporters with consistent volumes,
+              transparent grading and Jebel Ali consolidation — under a single accountable
+              contract.
             </p>
 
-            <div className="mt-10">
-              <div className="mb-4 text-[11px] uppercase tracking-[0.28em] text-stone">
-                Product Portfolio
-              </div>
-              <ul className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
-                {products.map((p, i) => (
-                  <li
+            <div className="mt-8">
+              <div className="mb-3 text-[11px] uppercase tracking-mid text-navy-400">Products</div>
+              <div className="flex flex-wrap gap-2">
+                {products.map((p) => (
+                  <span
                     key={p}
-                    className="flex items-baseline gap-3 border-b border-ink/10 pb-2 font-display text-lg text-ink"
+                    className="rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-sm text-white"
                   >
-                    <span className="text-[10px] italic text-gold-dark">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
                     {p}
-                  </li>
+                  </span>
                 ))}
-              </ul>
+              </div>
             </div>
 
-            <div className="mt-10">
-              <div className="mb-4 text-[11px] uppercase tracking-[0.28em] text-stone">
-                Markets Served
-              </div>
+            <div className="mt-6">
+              <div className="mb-3 text-[11px] uppercase tracking-mid text-navy-400">Markets</div>
               <div className="flex flex-wrap gap-2">
                 {markets.map((m) => (
-                  <span
-                    key={m}
-                    className="rounded-full border border-ink/20 px-4 py-1.5 text-[13px] text-ink/85"
-                  >
+                  <span key={m} className="rounded-full bg-accent/15 px-4 py-1.5 text-sm text-accent">
                     {m}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="mt-12 flex flex-wrap gap-4">
-              <a
-                href="#contact"
-                className="group inline-flex items-center gap-3 bg-ink px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.22em] text-paper transition hover:bg-forest"
-              >
-                Request a quote
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 border-b border-gold py-1 text-[12px] font-medium uppercase tracking-[0.22em] text-ink hover:text-gold-dark"
-              >
-                Become a distributor
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
+            <div className="mt-10">
+              <PillBtn href="#contact" variant="accent">Request Agro Quote</PillBtn>
             </div>
+
+            {/* decorative dot pattern */}
+            <div className="pointer-events-none absolute -bottom-12 -right-12 h-48 w-48 rounded-full bg-accent/10 blur-3xl" />
           </motion.div>
         </div>
       </div>
@@ -780,137 +724,79 @@ const Agro = () => {
   );
 };
 
-/* ============================================================
-   HEALTHCARE — beige variation
-   ============================================================ */
-const Healthcare = () => {
-  const categories = [
-    'Diagnostic Equipment',
-    'Patient Monitoring',
-    'Surgical Instruments',
-    'Hospital Furniture',
-    'Consumables & Disposables',
-    'Imaging Devices',
-    'Lab Equipment',
-    'Rehabilitation',
-  ];
+/* =========================================================
+   HEALTHCARE DETAIL — mirrored
+   ========================================================= */
+const HealthcareDetail = () => {
+  const categories = ['Diagnostic Equipment', 'Patient Monitoring', 'Surgical Instruments', 'Hospital Furniture', 'Consumables', 'Imaging Devices', 'Lab Equipment', 'Rehabilitation'];
   const customers = ['Hospitals', 'Clinics', 'Polyclinics', 'Pharmacies', 'Distributors'];
-
   return (
-    <section
-      id="healthcare"
-      className="relative scroll-mt-20 bg-bone py-28 sm:py-36"
-      aria-labelledby="healthcare-heading"
-    >
+    <section id="healthcare" className="scroll-mt-24 bg-offwhite py-24 lg:py-32">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        <div className="flex items-center justify-between">
-          <Eyebrow>IV — Healthcare</Eyebrow>
-          <span className="hidden text-[11px] uppercase tracking-[0.28em] text-stone sm:inline">
-            MOHAP-Compliant · UAE
-          </span>
-        </div>
-
-        <div className="mt-12 grid grid-cols-1 gap-14 lg:grid-cols-2 lg:gap-20">
+        <SectionTitle eyebrow="Healthcare Vertical · 02" title="MOHAP-compliant" accent="medical equipment supply." center />
+        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.9 }}
-            className="lg:pt-8"
+            transition={{ duration: 0.8 }}
+            className="relative order-2 overflow-hidden rounded-[2.5rem] bg-navy-900 p-10 text-white lg:order-1 lg:p-12"
           >
-            <h2
-              id="healthcare-heading"
-              className="font-display text-[clamp(1.9rem,4.2vw,3.4rem)] font-light leading-[1.05] tracking-[-0.015em] text-ink"
-            >
-              MOHAP-compliant medical equipment{' '}
-              <span className="italic text-gold-dark">trading & supply</span>.
-            </h2>
-            <p className="mt-6 max-w-xl text-[16px] leading-[1.75] text-ink/75">
-              We supply hospitals, clinics and distributors across the UAE with carefully
-              sourced medical equipment — with documentation, traceability and adherence to
-              UAE Ministry of Health & Prevention regulations.
+            <HeartPulse className="h-10 w-10 text-accent" />
+            <h3 className="mt-6 text-3xl font-extrabold sm:text-4xl">
+              Regulated medical equipment{' '}
+              <span className="text-accent">trading & distribution.</span>
+            </h3>
+            <p className="mt-4 text-navy-300">
+              We supply hospitals, clinics and distributors across the UAE — with
+              documentation, traceability and full adherence to UAE Ministry of Health
+              regulations.
             </p>
 
-            <div className="mt-10">
-              <div className="mb-4 text-[11px] uppercase tracking-[0.28em] text-stone">
-                Equipment Categories
-              </div>
-              <ul className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-                {categories.map((c, i) => (
-                  <li
+            <div className="mt-8">
+              <div className="mb-3 text-[11px] uppercase tracking-mid text-navy-400">Equipment Categories</div>
+              <div className="grid grid-cols-2 gap-2">
+                {categories.map((c) => (
+                  <div
                     key={c}
-                    className="flex items-baseline gap-3 border-b border-ink/10 pb-2 font-display text-lg text-ink"
+                    className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm"
                   >
-                    <span className="text-[10px] italic text-gold-dark">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    {c}
-                  </li>
+                    <Check className="h-4 w-4 flex-none text-accent" /> {c}
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
 
-            <div className="mt-10">
-              <div className="mb-4 text-[11px] uppercase tracking-[0.28em] text-stone">
-                Target Customers
-              </div>
+            <div className="mt-6">
+              <div className="mb-3 text-[11px] uppercase tracking-mid text-navy-400">Customers</div>
               <div className="flex flex-wrap gap-2">
                 {customers.map((c) => (
-                  <span
-                    key={c}
-                    className="rounded-full border border-ink/20 px-4 py-1.5 text-[13px] text-ink/85"
-                  >
+                  <span key={c} className="rounded-full bg-accent/15 px-4 py-1.5 text-sm text-accent">
                     {c}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="mt-12 flex flex-wrap gap-4">
-              <a
-                href="#contact"
-                className="group inline-flex items-center gap-3 bg-ink px-7 py-3.5 text-[12px] font-medium uppercase tracking-[0.22em] text-paper transition hover:bg-forest"
-              >
-                Request catalog
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 border-b border-gold py-1 text-[12px] font-medium uppercase tracking-[0.22em] text-ink hover:text-gold-dark"
-              >
-                Partner with us
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
+            <div className="mt-10">
+              <PillBtn href="#contact" variant="accent">Request Catalog</PillBtn>
             </div>
+            <div className="pointer-events-none absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-accent/10 blur-3xl" />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.9, delay: 0.1 }}
-            className="relative"
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="order-1 overflow-hidden rounded-[2.5rem] lg:order-2"
           >
-            <div className="ornament-frame relative overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?w=1200&q=85"
-                alt="Minimalist medical instruments — MOHAP-compliant equipment supplied in the UAE"
-                loading="lazy"
-                className="h-[600px] w-full object-cover"
-              />
-            </div>
-            <div className="mt-6 flex items-start justify-between border-t border-ink/15 pt-4">
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.28em] text-stone">
-                  Plate III
-                </div>
-                <div className="mt-1 font-display text-lg italic text-ink">
-                  Instrumenta · Quiet precision.
-                </div>
-              </div>
-              <div className="font-display text-sm text-gold-dark">— MOHAP</div>
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1100&q=85"
+              alt="MOHAP-compliant medical equipment in modern hospital"
+              className="h-full max-h-[640px] w-full object-cover"
+            />
           </motion.div>
         </div>
       </div>
@@ -918,57 +804,145 @@ const Healthcare = () => {
   );
 };
 
-/* ============================================================
-   WHY VDS — numbered editorial entries
-   ============================================================ */
-const WhyChoose = () => {
+/* =========================================================
+   MARKETS STRIP — marquee
+   ========================================================= */
+const Markets = () => {
   const items = [
-    ['UAE-Registered LLC', 'Accountable Dubai entity. Transparent contracting, banking and invoicing under UAE jurisdiction.'],
-    ['Multi-Vertical Operator', 'Agro, healthcare and AI under one operational roof — one point of accountability.'],
-    ['Global Logistics Network', 'Jebel Ali consolidation. Full container and LCL flows, documentation handled in-house.'],
-    ['Regulatory Compliance', 'MOHAP-aligned medical imports. Documented agro grades. Auditable supply trail.'],
-    ['Tri-Continental Reach', 'Active corridors into the GCC, across Africa, and through the CIS region.'],
-    ['Quietly Future-Ready', 'AI automation embedded into how we serve and enable our partners.'],
+    'United Arab Emirates',
+    'Saudi Arabia',
+    'Oman',
+    'Kuwait',
+    'Qatar',
+    'Bahrain',
+    'Kenya',
+    'Nigeria',
+    'Ethiopia',
+    'Senegal',
+    'Russia',
+    'Kazakhstan',
+    'Uzbekistan',
+    'India',
   ];
-
   return (
-    <section className="relative bg-paper py-28 sm:py-36">
+    <section className="border-y border-navy-100 bg-white py-12">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        <div className="flex items-center justify-between">
-          <Eyebrow>V — Why VDS</Eyebrow>
-          <span className="hidden text-[11px] uppercase tracking-[0.28em] text-stone sm:inline">
-            The case for VDS
-          </span>
+        <div className="mb-6 flex items-center justify-center gap-4 text-[11px] font-bold uppercase tracking-mid text-navy-500">
+          <span className="h-px w-12 bg-navy-200" />
+          Markets we serve
+          <span className="h-px w-12 bg-navy-200" />
         </div>
+        <div className="overflow-hidden">
+          <div className="flex w-max animate-marquee gap-12">
+            {[...items, ...items].map((m, i) => (
+              <div key={i} className="flex items-center gap-3 whitespace-nowrap">
+                <Globe2 className="h-5 w-5 text-accent" />
+                <span className="text-lg font-bold text-navy-700">{m}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9 }}
-          className="mt-10 max-w-3xl font-display text-[clamp(2rem,4.5vw,3.6rem)] font-light leading-[1.05] tracking-[-0.015em] text-ink"
-        >
-          Built on trust. <span className="italic text-gold-dark">Engineered</span> for global trade.
-        </motion.h2>
+/* =========================================================
+   WHY VDS — pricing-style 3-column cards w/ floating tags
+   ========================================================= */
+const WhyVDS = () => {
+  const cards = [
+    {
+      tag: 'Trust',
+      title: 'UAE-Registered Entity',
+      bullets: [
+        'Compliant Dubai LLC',
+        'Transparent contracting',
+        'UAE-banked invoicing',
+        'Auditable supply chain',
+        'English & Arabic teams',
+      ],
+    },
+    {
+      tag: 'Scale',
+      title: 'Tri-Continental Reach',
+      bullets: [
+        'Active GCC corridors',
+        'East & West Africa',
+        'CIS region flows',
+        'Direct & FOB origins',
+        'Jebel Ali consolidation',
+      ],
+      featured: true,
+    },
+    {
+      tag: 'Standard',
+      title: 'Compliance Forward',
+      bullets: [
+        'MOHAP-aligned imports',
+        'Documented agro grades',
+        'Full traceability',
+        'In-house customs',
+        'Regulated re-export',
+      ],
+    },
+  ];
+  return (
+    <section className="bg-offwhite py-24 lg:py-32">
+      <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+        <SectionTitle eyebrow="Why VDS" title="Built on trust." accent="Engineered for trade." center />
 
-        <div className="mt-16 divide-y divide-ink/15 border-y border-ink/15">
-          {items.map(([t, d], i) => (
+        <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {cards.map((c, i) => (
             <motion.div
-              key={t}
-              initial={{ opacity: 0, y: 16 }}
+              key={c.title}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.6, delay: i * 0.05 }}
-              className="group grid grid-cols-[60px,1fr] items-baseline gap-6 py-8 transition-colors duration-300 hover:bg-cream sm:grid-cols-[80px,1.2fr,2fr] sm:gap-10"
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.6, delay: i * 0.08 }}
+              className={`relative rounded-3xl p-8 ring-1 ${
+                c.featured
+                  ? 'bg-navy-900 text-white ring-navy-900'
+                  : 'bg-white text-navy-900 ring-navy-100'
+              }`}
             >
-              <div className="font-display text-2xl italic text-gold-dark">
-                {String(i + 1).padStart(2, '0')}
+              {/* Floating dark tag (like pricing table /month $) */}
+              <div
+                className={`absolute -top-6 left-6 inline-flex flex-col rounded-2xl px-5 py-3 shadow-lg ${
+                  c.featured ? 'bg-accent text-white' : 'bg-navy-900 text-white'
+                }`}
+              >
+                <span className="text-[10px] font-bold uppercase tracking-mid opacity-80">Pillar</span>
+                <span className="text-lg font-extrabold leading-none">{c.tag}</span>
               </div>
-              <div className="font-display text-2xl font-light text-ink sm:text-3xl">
-                {t}
-              </div>
-              <div className="col-span-2 max-w-2xl text-[15px] leading-relaxed text-stone sm:col-span-1">
-                {d}
+
+              <div className="pt-6">
+                <h3 className={`text-2xl font-extrabold ${c.featured ? 'text-white' : 'text-navy-900'}`}>
+                  {c.title}
+                </h3>
+                <ul className="mt-6 space-y-3">
+                  {c.bullets.map((b) => (
+                    <li key={b} className={`flex items-start gap-3 text-sm ${c.featured ? 'text-navy-200' : 'text-navy-600'}`}>
+                      <span className={`mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full ${c.featured ? 'bg-accent text-white' : 'bg-accent/20 text-accent'}`}>
+                        <Check className="h-3 w-3" />
+                      </span>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-8">
+                  <a
+                    href="#contact"
+                    className={`group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition ${
+                      c.featured
+                        ? 'bg-white text-navy-900 hover:bg-accent hover:text-white'
+                        : 'bg-navy-900 text-white hover:bg-accent'
+                    }`}
+                  >
+                    Talk to us
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -978,178 +952,92 @@ const WhyChoose = () => {
   );
 };
 
-/* ============================================================
-   GLOBAL REACH — dark forest, gold map
-   ============================================================ */
-const GlobalReach = () => {
-  const pulses = [
-    { cx: 555, cy: 215 },
-    { cx: 600, cy: 250 },
-    { cx: 530, cy: 280 },
-    { cx: 510, cy: 320 },
-    { cx: 470, cy: 300 },
-    { cx: 560, cy: 160 },
-    { cx: 610, cy: 150 },
-    { cx: 660, cy: 145 },
-    { cx: 800, cy: 320 },
+/* =========================================================
+   TESTIMONIALS — image left + quote right with controls
+   ========================================================= */
+const Testimonials = () => {
+  const items = [
+    {
+      name: 'Karim Al-Hassan',
+      role: 'Procurement Head · Regional Distributor, Riyadh',
+      img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=85',
+      quote:
+        'VDS handled our entire onion sourcing pipeline out of Dubai for two seasons. Grading was consistent, paperwork was clean, and the team responded around the clock. A genuinely professional trading partner.',
+    },
+    {
+      name: 'Dr. Reem Al-Mansoori',
+      role: 'Biomedical Director · Private Hospital Group, UAE',
+      img: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=85',
+      quote:
+        'Their MOHAP documentation discipline is exactly what a hospital chain needs. We expanded our patient-monitoring fleet through VDS with full traceability — and zero compliance friction.',
+    },
+    {
+      name: 'Aigerim Yerlanovna',
+      role: 'Import Manager · Almaty, Kazakhstan',
+      img: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&q=85',
+      quote:
+        'Reliable container flow into the CIS is rare. VDS treats every shipment as accountable — and that is why we keep coming back.',
+    },
   ];
+  const [idx, setIdx] = useState(0);
+  const next = () => setIdx((i) => (i + 1) % items.length);
+  const prev = () => setIdx((i) => (i - 1 + items.length) % items.length);
+  const t = items[idx];
 
   return (
-    <section className="relative overflow-hidden bg-forest-deep py-28 text-paper grain sm:py-36">
+    <section className="bg-white py-24 lg:py-32">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        <div className="flex items-center justify-between">
-          <Eyebrow tone="paper">VI — Global Reach</Eyebrow>
-          <span className="hidden text-[11px] uppercase tracking-[0.28em] text-paper/55 sm:inline">
-            Trade Corridors
-          </span>
-        </div>
+        <SectionTitle eyebrow="Testimonials" title="What partners" accent="say about us." center />
 
-        <div className="mt-10 grid grid-cols-1 gap-12 lg:grid-cols-[1fr,1.6fr] lg:gap-16">
+        <div className="mt-14 grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr,1.5fr] lg:gap-16">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9 }}
+            key={t.img}
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="relative overflow-hidden rounded-[2.5rem]"
           >
-            <h2 className="font-display text-[clamp(2rem,4.2vw,3.4rem)] font-light leading-[1.05] tracking-[-0.015em] text-paper">
-              Active corridors across{' '}
-              <span className="italic text-gradient-gold">three continents</span>.
-            </h2>
-            <p className="mt-6 max-w-md text-[15px] leading-relaxed text-paper/70">
-              From Dubai we move goods, equipment and technology where they&apos;re needed — fast,
-              compliant, and underwritten by a single accountable operator.
-            </p>
-
-            <div className="mt-10 space-y-4 text-sm">
-              {[
-                ['UAE & GCC', 'Primary market · Direct distribution.'],
-                ['Africa', 'East & West Africa re-export corridors.'],
-                ['CIS', 'Russia, Central Asia volume flows.'],
-                ['South Asia', 'Sourcing & secondary supply.'],
-              ].map(([t, d]) => (
-                <div
-                  key={t}
-                  className="flex items-start justify-between gap-6 border-b border-paper/15 pb-4"
-                >
-                  <div className="flex items-baseline gap-3">
-                    <span className="mt-1.5 h-2 w-2 rounded-full bg-gold" />
-                    <div>
-                      <div className="font-display text-lg text-paper">{t}</div>
-                      <div className="text-[13px] text-paper/55">{d}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={t.img} alt={t.name} className="h-[480px] w-full object-cover" />
+            <div className="absolute bottom-6 left-6 rounded-2xl bg-white p-4 shadow-xl ring-1 ring-navy-100">
+              <Quote className="h-6 w-6 text-accent" />
             </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="relative"
+            key={t.name}
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
           >
-            <svg
-              viewBox="0 0 1000 500"
-              className="h-auto w-full"
-              role="img"
-              aria-label="World map showing VDS Trading active markets in UAE, GCC, Africa and CIS"
-            >
-              <defs>
-                <linearGradient id="routeGrad2" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#B58B3F" stopOpacity="0.05" />
-                  <stop offset="50%" stopColor="#D9B36A" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#B58B3F" stopOpacity="0.05" />
-                </linearGradient>
-              </defs>
+            <Quote className="h-10 w-10 text-accent" />
+            <p className="mt-4 text-2xl font-medium leading-snug text-navy-900 sm:text-3xl">
+              &ldquo;{t.quote}&rdquo;
+            </p>
+            <div className="mt-8">
+              <div className="text-lg font-extrabold text-navy-900">{t.name}</div>
+              <div className="text-sm text-navy-500">{t.role}</div>
+            </div>
 
-              {/* Land dots */}
-              {Array.from({ length: 26 }).map((_, row) =>
-                Array.from({ length: 56 }).map((_, col) => {
-                  const x = 30 + col * 17;
-                  const y = 30 + row * 17;
-                  const h = Math.abs(Math.sin(row * 13.37 + col * 7.91) * 10000) % 1;
-                  const inLand =
-                    (x > 430 && x < 780 && y > 80 && y < 380 && h > 0.35) ||
-                    (x > 130 && x < 330 && y > 100 && y < 380 && h > 0.5) ||
-                    (x > 780 && x < 880 && y > 300 && y < 380 && h > 0.4);
-                  if (!inLand) return null;
-                  return (
-                    <circle
-                      key={`${row}-${col}`}
-                      cx={x}
-                      cy={y}
-                      r="1.5"
-                      fill="#D9B36A"
-                      opacity="0.28"
-                    />
-                  );
-                })
-              )}
-
-              {/* Trade arcs from Dubai */}
-              {[
-                [600, 230, 500, 310],
-                [600, 230, 250, 280],
-                [600, 230, 620, 150],
-                [600, 230, 800, 320],
-              ].map(([x1, y1, x2, y2], i) => {
-                const mx = (x1 + x2) / 2;
-                const my = Math.min(y1, y2) - 80;
-                return (
-                  <path
-                    key={i}
-                    d={`M ${x1} ${y1} Q ${mx} ${my} ${x2} ${y2}`}
-                    fill="none"
-                    stroke="url(#routeGrad2)"
-                    strokeWidth="1.2"
-                    strokeDasharray="3 5"
-                  />
-                );
-              })}
-
-              {/* Pulses */}
-              {pulses.map((p, i) => (
-                <g key={i}>
-                  <circle cx={p.cx} cy={p.cy} r="12" fill="#D9B36A" opacity="0.18">
-                    <animate
-                      attributeName="r"
-                      values="5;16;5"
-                      dur="2.6s"
-                      begin={`${i * 0.2}s`}
-                      repeatCount="indefinite"
-                    />
-                    <animate
-                      attributeName="opacity"
-                      values="0.4;0;0.4"
-                      dur="2.6s"
-                      begin={`${i * 0.2}s`}
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                  <circle cx={p.cx} cy={p.cy} r="3" fill="#D9B36A" />
-                </g>
-              ))}
-
-              {/* Dubai HQ */}
-              <g>
-                <circle cx="600" cy="230" r="18" fill="#D9B36A" opacity="0.18">
-                  <animate attributeName="r" values="9;24;9" dur="2s" repeatCount="indefinite" />
-                </circle>
-                <circle cx="600" cy="230" r="5" fill="#D9B36A" />
-                <text
-                  x="612"
-                  y="222"
-                  fill="#F5EFE3"
-                  fontSize="11"
-                  fontFamily="serif"
-                  fontStyle="italic"
-                >
-                  Dubai · HQ
-                </text>
-              </g>
-            </svg>
+            <div className="mt-10 flex items-center gap-3">
+              <button
+                onClick={prev}
+                aria-label="Previous testimonial"
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-navy-200 text-navy-700 transition hover:border-accent hover:bg-accent hover:text-white"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={next}
+                aria-label="Next testimonial"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-navy-900 text-white transition hover:bg-accent"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+              <span className="ml-4 text-sm font-semibold text-navy-500">
+                {String(idx + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
+              </span>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -1157,17 +1045,11 @@ const GlobalReach = () => {
   );
 };
 
-/* ============================================================
-   CONTACT — editorial form
-   ============================================================ */
+/* =========================================================
+   CONTACT — Request a free quote form
+   ========================================================= */
 const Contact = () => {
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    vertical: 'agro',
-    message: '',
-  });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', vertical: 'agro', message: '' });
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (e) => {
@@ -1195,315 +1077,288 @@ const Contact = () => {
   };
 
   return (
-    <section
-      id="contact"
-      className="relative scroll-mt-20 bg-paper py-28 sm:py-36"
-      aria-labelledby="contact-heading"
-    >
-      <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        <div className="flex items-center justify-between">
-          <Eyebrow>VII — Contact</Eyebrow>
-          <span className="hidden text-[11px] uppercase tracking-[0.28em] text-stone sm:inline">
-            Begin a Conversation
-          </span>
-        </div>
+    <section id="contact" className="scroll-mt-24 bg-offwhite py-24 lg:py-32">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 lg:grid-cols-[1fr,1.1fr] lg:gap-20 lg:px-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <Eyebrow>Make an Inquiry</Eyebrow>
+          <h2 className="mt-5 text-[clamp(2rem,4.4vw,3.4rem)] font-extrabold leading-[1.1] text-navy-900 text-spread">
+            Let&apos;s build a <span className="text-accent">trade flow</span> together.
+          </h2>
+          <p className="mt-5 max-w-md text-navy-600">
+            Tell us about your sourcing or supply requirement. Our team responds within
+            24 hours.
+          </p>
 
-        <div className="mt-12 grid grid-cols-1 gap-14 lg:grid-cols-[1fr,1.1fr] lg:gap-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9 }}
-          >
-            <h2
-              id="contact-heading"
-              className="font-display text-[clamp(2rem,4.5vw,3.6rem)] font-light leading-[1.05] tracking-[-0.015em] text-ink"
+          <div className="mt-10 space-y-4">
+            <a
+              href="tel:+971542695401"
+              className="group flex items-center gap-4 rounded-2xl border border-navy-100 bg-white p-5 transition hover:border-accent"
             >
-              Let&apos;s build a trade flow{' '}
-              <span className="italic text-gold-dark">together</span>.
-            </h2>
-            <p className="mt-6 max-w-md text-[16px] leading-[1.75] text-ink/75">
-              Tell us about your sourcing or supply needs. We respond within twenty-four
-              hours, every working day.
-            </p>
-
-            <div className="mt-10 space-y-6">
-              <a
-                href="tel:+971542695401"
-                className="group flex items-start gap-5 border-b border-ink/15 pb-5 transition hover:border-gold"
-              >
-                <Phone className="mt-1 h-4 w-4 text-gold-dark" />
-                <div>
-                  <div className="text-[10px] uppercase tracking-[0.28em] text-stone">
-                    Telephone
-                  </div>
-                  <div className="mt-1 font-display text-2xl text-ink transition group-hover:text-gold-dark">
-                    +971 54 269 5401
-                  </div>
-                </div>
-              </a>
-
-              <a
-                href="mailto:sales@vdsdxb.ae"
-                className="group flex items-start gap-5 border-b border-ink/15 pb-5 transition hover:border-gold"
-              >
-                <Mail className="mt-1 h-4 w-4 text-gold-dark" />
-                <div>
-                  <div className="text-[10px] uppercase tracking-[0.28em] text-stone">
-                    Electronic Mail
-                  </div>
-                  <div className="mt-1 font-display text-2xl text-ink transition group-hover:text-gold-dark">
-                    sales@vdsdxb.ae
-                  </div>
-                </div>
-              </a>
-
-              <div className="flex items-start gap-5 border-b border-ink/15 pb-5">
-                <MapPin className="mt-1 h-4 w-4 text-gold-dark" />
-                <div>
-                  <div className="text-[10px] uppercase tracking-[0.28em] text-stone">
-                    Headquarters
-                  </div>
-                  <div className="mt-1 font-display text-2xl text-ink">
-                    Dubai, United Arab Emirates
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.form
-            onSubmit={onSubmit}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, delay: 0.1 }}
-            className="space-y-7 border-l border-ink/15 pl-0 lg:pl-12"
-          >
-            <FieldEditorial
-              id="name"
-              label="Full Name"
-              required
-              value={form.name}
-              onChange={(v) => setForm({ ...form, name: v })}
-            />
-            <FieldEditorial
-              id="email"
-              label="Email Address"
-              type="email"
-              required
-              value={form.email}
-              onChange={(v) => setForm({ ...form, email: v })}
-            />
-            <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
-              <FieldEditorial
-                id="phone"
-                label="Telephone"
-                value={form.phone}
-                onChange={(v) => setForm({ ...form, phone: v })}
-              />
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/15 text-accent transition group-hover:bg-accent group-hover:text-white">
+                <Phone className="h-6 w-6" />
+              </span>
               <div>
-                <label
-                  htmlFor="vertical"
-                  className="block text-[10px] uppercase tracking-[0.28em] text-stone"
-                >
-                  Interest
-                </label>
-                <Select
-                  value={form.vertical}
-                  onValueChange={(v) => setForm({ ...form, vertical: v })}
-                >
-                  <SelectTrigger
-                    id="vertical"
-                    className="mt-2 h-auto rounded-none border-0 border-b border-ink/30 bg-transparent px-0 pb-2 font-display text-lg text-ink shadow-none focus:ring-0"
-                  >
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="agro">Agro Trading</SelectItem>
-                    <SelectItem value="healthcare">Healthcare Equipment</SelectItem>
-                    <SelectItem value="ai">AI Agents & Automation</SelectItem>
-                    <SelectItem value="general">General Inquiry</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="text-xs font-bold uppercase tracking-mid text-navy-500">Phone</div>
+                <div className="text-lg font-extrabold text-navy-900">+971 54 269 5401</div>
+              </div>
+            </a>
+            <a
+              href="mailto:sales@vdsdxb.ae"
+              className="group flex items-center gap-4 rounded-2xl border border-navy-100 bg-white p-5 transition hover:border-accent"
+            >
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/15 text-accent transition group-hover:bg-accent group-hover:text-white">
+                <Mail className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-mid text-navy-500">Email</div>
+                <div className="text-lg font-extrabold text-navy-900">sales@vdsdxb.ae</div>
+              </div>
+            </a>
+            <div className="flex items-center gap-4 rounded-2xl border border-navy-100 bg-white p-5">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/15 text-accent">
+                <MapPin className="h-6 w-6" />
+              </span>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-mid text-navy-500">Location</div>
+                <div className="text-lg font-extrabold text-navy-900">Dubai, United Arab Emirates</div>
               </div>
             </div>
+          </div>
+        </motion.div>
+
+        <motion.form
+          onSubmit={onSubmit}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="rounded-[2rem] bg-white p-8 shadow-xl ring-1 ring-navy-100 sm:p-10"
+        >
+          <h3 className="text-2xl font-extrabold text-navy-900">Request a free quote</h3>
+          <p className="mt-2 text-sm text-navy-500">We&apos;ll respond within 24 hours.</p>
+
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <FieldBox id="name" label="Full Name *" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
+            <FieldBox id="email" type="email" label="Email *" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
+            <FieldBox id="phone" label="Phone" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
             <div>
-              <label
-                htmlFor="message"
-                className="block text-[10px] uppercase tracking-[0.28em] text-stone"
-              >
-                Message *
+              <label htmlFor="vertical" className="mb-1.5 block text-xs font-bold uppercase tracking-mid text-navy-500">
+                Interest
               </label>
-              <Textarea
-                id="message"
-                required
-                rows={5}
-                className="mt-2 resize-none rounded-none border-0 border-b border-ink/30 bg-transparent px-0 pb-2 font-display text-lg text-ink shadow-none placeholder:text-stone-light focus-visible:border-gold focus-visible:ring-0"
-                placeholder="Volumes, target markets, timeline..."
-                value={form.message}
-                onChange={(e) => setForm({ ...form, message: e.target.value })}
-              />
+              <Select value={form.vertical} onValueChange={(v) => setForm({ ...form, vertical: v })}>
+                <SelectTrigger id="vertical" className="h-12 rounded-xl border-navy-200 bg-white text-navy-900">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="agro">Agro Trading</SelectItem>
+                  <SelectItem value="healthcare">Healthcare Equipment</SelectItem>
+                  <SelectItem value="ai">AI Agents & Automation</SelectItem>
+                  <SelectItem value="general">General Inquiry</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="group inline-flex items-center gap-3 bg-ink px-9 py-4 text-[12px] font-medium uppercase tracking-[0.22em] text-paper transition hover:bg-forest disabled:opacity-60"
-            >
-              {submitting ? 'Sending...' : 'Send enquiry'}
-              <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </button>
-
-            <p className="text-[11px] uppercase tracking-[0.18em] text-stone">
-              By submitting, you agree to be contacted by VDS General Trading LLC.
-            </p>
-          </motion.form>
-        </div>
+          </div>
+          <div className="mt-4">
+            <label htmlFor="message" className="mb-1.5 block text-xs font-bold uppercase tracking-mid text-navy-500">
+              Message *
+            </label>
+            <Textarea
+              id="message"
+              required
+              rows={5}
+              className="resize-none rounded-xl border-navy-200 bg-white text-navy-900"
+              placeholder="Volumes, target markets, timeline..."
+              value={form.message}
+              onChange={(e) => setForm({ ...form, message: e.target.value })}
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="group mt-6 inline-flex items-center gap-3 rounded-full bg-navy-900 px-8 py-4 text-sm font-bold text-white transition hover:bg-accent disabled:opacity-60"
+          >
+            {submitting ? 'Submitting...' : 'Submit Message'}
+            <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </button>
+        </motion.form>
       </div>
     </section>
   );
 };
 
-const FieldEditorial = ({ id, label, type = 'text', value, onChange, required }) => (
+const FieldBox = ({ id, label, type = 'text', value, onChange }) => (
   <div>
-    <label htmlFor={id} className="block text-[10px] uppercase tracking-[0.28em] text-stone">
-      {label} {required && '*'}
+    <label htmlFor={id} className="mb-1.5 block text-xs font-bold uppercase tracking-mid text-navy-500">
+      {label}
     </label>
     <Input
       id={id}
       type={type}
-      required={required}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="mt-2 h-auto rounded-none border-0 border-b border-ink/30 bg-transparent px-0 pb-2 font-display text-lg text-ink shadow-none placeholder:text-stone-light focus-visible:border-gold focus-visible:ring-0"
+      className="h-12 rounded-xl border-navy-200 bg-white text-navy-900"
     />
   </div>
 );
 
-/* ============================================================
-   FOOTER — deep forest
-   ============================================================ */
+/* =========================================================
+   NEWSLETTER + READY TO WORK STRIP
+   ========================================================= */
+const Newsletter = () => {
+  const [email, setEmail] = useState('');
+  return (
+    <section className="bg-white py-16">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-8 rounded-[2.5rem] bg-navy-900 px-8 py-12 lg:grid-cols-2 lg:gap-12 lg:px-14 lg:py-16">
+        <div>
+          <div className="text-[11px] font-bold uppercase tracking-mid text-accent">
+            Stay In Touch
+          </div>
+          <h3 className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-4xl text-spread">
+            Ready to <span className="text-accent">work with us?</span>
+          </h3>
+          <p className="mt-3 max-w-md text-navy-300">
+            Subscribe for monthly updates on commodity flows, healthcare procurement
+            insights, and trade corridor news.
+          </p>
+        </div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!email) return;
+            toast.success('Subscribed! We\'ll be in touch.');
+            setEmail('');
+          }}
+          className="flex w-full items-center gap-2 rounded-full bg-white p-2"
+        >
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email address"
+            className="min-w-0 flex-1 bg-transparent px-5 py-3 text-navy-900 outline-none placeholder:text-navy-400"
+          />
+          <button
+            type="submit"
+            className="group inline-flex flex-none items-center gap-2 rounded-full bg-navy-900 px-6 py-3 text-sm font-bold text-white transition hover:bg-accent"
+          >
+            Subscribe
+            <ArrowUpRight className="h-4 w-4" />
+          </button>
+        </form>
+      </div>
+    </section>
+  );
+};
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
 const Footer = () => {
   return (
-    <footer
-      className="relative bg-forest-deep py-16 text-paper grain"
-      aria-label="Footer"
-    >
+    <footer className="bg-navy-950 pt-16 text-white">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        <div className="grid grid-cols-1 gap-12 border-b border-paper/15 pb-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+        <div className="grid grid-cols-1 gap-10 border-b border-white/10 pb-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-5">
-            <div className="font-display text-3xl font-light tracking-tight text-paper">
-              VDS<span className="text-gold-dark">.</span>
-            </div>
-            <div className="mt-1 text-[10px] uppercase tracking-[0.32em] text-paper/55">
-              General Trading LLC
-            </div>
-            <p className="mt-6 max-w-sm text-[14px] leading-relaxed text-paper/70">
+            <a href="#top" className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white">
+                <span className="font-extrabold text-navy-900">V</span>
+              </div>
+              <div>
+                <div className="text-xl font-bold">VDS</div>
+                <div className="text-[10px] uppercase tracking-mid text-navy-400">
+                  General Trading LLC
+                </div>
+              </div>
+            </a>
+            <p className="mt-6 max-w-sm text-sm text-navy-300">
               A UAE-registered Dubai trading house — building dependable trade corridors
-              across three continents.
+              across the GCC, Africa and CIS regions, across three carefully chosen
+              verticals.
             </p>
-            <div className="mt-6 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.28em] text-paper/55">
-              <span className="h-px w-8 bg-gold" />
-              Dubai, UAE
+            <div className="mt-6 flex items-center gap-3">
+              {[Linkedin, Twitter, Facebook, Youtube].map((Icon, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/85 transition hover:border-accent hover:bg-accent hover:text-white"
+                  aria-label="social"
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
             </div>
           </div>
 
           <div className="lg:col-span-2">
-            <div className="text-[10px] uppercase tracking-[0.28em] text-paper/50">
-              Verticals
-            </div>
-            <ul className="mt-4 space-y-2 font-display text-base">
+            <div className="text-sm font-bold uppercase tracking-mid text-white">Verticals</div>
+            <ul className="mt-5 space-y-3 text-sm text-navy-300">
+              <li><a href="#agro" className="hover:text-accent">Agro Trading</a></li>
+              <li><a href="#healthcare" className="hover:text-accent">Healthcare</a></li>
               <li>
-                <a href="#agro" className="text-paper/85 hover:text-gold-light">
-                  Agro Trading
-                </a>
-              </li>
-              <li>
-                <a href="#healthcare" className="text-paper/85 hover:text-gold-light">
-                  Healthcare
-                </a>
-              </li>
-              <li>
-                <a
-                  href={AI_EXTERNAL_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-paper/85 hover:text-gold-light"
-                >
-                  AI Agents
-                  <ArrowUpRight className="h-3 w-3" />
+                <a href={AI_EXTERNAL_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:text-accent">
+                  AI Agents <ArrowUpRight className="h-3 w-3" />
                 </a>
               </li>
             </ul>
           </div>
 
           <div className="lg:col-span-2">
-            <div className="text-[10px] uppercase tracking-[0.28em] text-paper/50">
-              Company
-            </div>
-            <ul className="mt-4 space-y-2 font-display text-base">
-              <li>
-                <a href="#about" className="text-paper/85 hover:text-gold-light">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="text-paper/85 hover:text-gold-light">
-                  Contact
-                </a>
-              </li>
-              <li>
-                <a href="/sitemap.xml" className="text-paper/85 hover:text-gold-light">
-                  Sitemap
-                </a>
-              </li>
+            <div className="text-sm font-bold uppercase tracking-mid text-white">Company</div>
+            <ul className="mt-5 space-y-3 text-sm text-navy-300">
+              <li><a href="#about" className="hover:text-accent">About</a></li>
+              <li><a href="#contact" className="hover:text-accent">Contact</a></li>
+              <li><a href="/sitemap.xml" className="hover:text-accent">Sitemap</a></li>
             </ul>
           </div>
 
           <div className="lg:col-span-3">
-            <div className="text-[10px] uppercase tracking-[0.28em] text-paper/50">
-              Contact
-            </div>
-            <ul className="mt-4 space-y-2 font-display text-base">
-              <li>
-                <a href="tel:+971542695401" className="text-paper/85 hover:text-gold-light">
-                  +971 54 269 5401
-                </a>
-              </li>
-              <li>
-                <a href="mailto:sales@vdsdxb.ae" className="text-paper/85 hover:text-gold-light">
-                  sales@vdsdxb.ae
-                </a>
-              </li>
-              <li className="text-paper/85">Dubai · UAE</li>
+            <div className="text-sm font-bold uppercase tracking-mid text-white">Get In Touch</div>
+            <ul className="mt-5 space-y-3 text-sm text-navy-300">
+              <li><a href="tel:+971542695401" className="hover:text-accent">+971 54 269 5401</a></li>
+              <li><a href="mailto:sales@vdsdxb.ae" className="hover:text-accent">sales@vdsdxb.ae</a></li>
+              <li>Dubai, United Arab Emirates</li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col items-start justify-between gap-3 text-[11px] uppercase tracking-[0.22em] text-paper/45 sm:flex-row sm:items-center">
-          <div>© {new Date().getFullYear()} VDS General Trading LLC</div>
-          <div className="italic">All rights reserved · Dubai, UAE</div>
+        <div className="flex flex-col items-start justify-between gap-3 py-6 text-xs text-navy-400 sm:flex-row sm:items-center">
+          <div>© {new Date().getFullYear()} VDS General Trading LLC. All rights reserved.</div>
+          <div className="flex items-center gap-6">
+            <a href="#about" className="hover:text-accent">About</a>
+            <a href="#contact" className="hover:text-accent">Contact</a>
+            <a href="/sitemap.xml" className="hover:text-accent">Sitemap</a>
+          </div>
         </div>
       </div>
     </footer>
   );
 };
 
-/* ============================================================
+/* =========================================================
    APP
-   ============================================================ */
+   ========================================================= */
 const App = () => {
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-paper">
+    <main className="relative min-h-screen overflow-x-hidden bg-white">
+      <TopBar />
+      <Nav />
       <Hero />
       <About />
       <Verticals />
-      <Agro />
-      <Healthcare />
-      <WhyChoose />
-      <GlobalReach />
+      <CtaBanner />
+      <Process />
+      <AgroDetail />
+      <HealthcareDetail />
+      <Markets />
+      <WhyVDS />
+      <Testimonials />
       <Contact />
+      <Newsletter />
       <Footer />
     </main>
   );
