@@ -48,15 +48,17 @@ const AI_EXTERNAL_URL = 'https://www.talkbotagent.com';
    TOP UTILITY BAR
    ========================================================= */
 const TopBar = () => (
-  <div className="hidden border-b border-navy-200 bg-white text-[12px] text-navy-600 md:block">
-    <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-2.5 lg:px-10">
-      <div className="flex items-center gap-6">
-        <a href="mailto:sales@vdsdxb.ae" className="flex items-center gap-2 hover:text-navy">
-          <Mail className="h-3.5 w-3.5" /> sales@vdsdxb.ae
+  <div className="hidden border-b border-navy-200 bg-white text-[12px] text-navy-600 md:block" suppressHydrationWarning>
+    <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-2.5 lg:px-10" suppressHydrationWarning>
+      <div className="flex items-center gap-6" suppressHydrationWarning>
+        <a href="mailto:sales@vdsdxb.ae" className="flex items-center gap-2 hover:text-navy" suppressHydrationWarning>
+          <Mail className="h-3.5 w-3.5" />
+          <span suppressHydrationWarning>sales@vdsdxb.ae</span>
         </a>
         <span className="h-3 w-px bg-navy-200" />
-        <a href="tel:+971542695401" className="flex items-center gap-2 hover:text-navy">
-          <Phone className="h-3.5 w-3.5" /> +971 54 269 5401
+        <a href="tel:+971542695401" className="flex items-center gap-2 hover:text-navy" suppressHydrationWarning>
+          <Phone className="h-3.5 w-3.5" />
+          <span suppressHydrationWarning>+971 54 269 5401</span>
         </a>
       </div>
       <div className="flex items-center gap-5">
