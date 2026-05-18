@@ -1,11 +1,18 @@
-import { Inter } from 'next/font/google';
+import { Inter, Fraunces } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-sans',
+});
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-display',
+  axes: ['SOFT', 'WONK', 'opsz'],
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://vdsdxb.ae';
@@ -40,13 +47,13 @@ export const metadata = {
     siteName: 'VDS General Trading LLC',
     title: 'VDS General Trading LLC – Trading Excellence Across Continents',
     description:
-      'UAE-registered trading house powering global agro exports, MOHAP-compliant healthcare equipment supply, and next-gen AI automation agents.',
+      'A UAE-registered Dubai trading house. Agro commodities, MOHAP-compliant healthcare equipment, and next-generation AI automation agents.',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80',
+        url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=85',
         width: 1200,
         height: 630,
-        alt: 'VDS General Trading – Dubai headquarters skyline',
+        alt: 'VDS General Trading – Dubai headquarters',
       },
     ],
   },
@@ -55,7 +62,7 @@ export const metadata = {
     title: 'VDS General Trading LLC – Trading Excellence Across Continents',
     description:
       'Agro commodities, MOHAP-compliant medical equipment, and AI automation. UAE-registered. Globally trusted.',
-    images: ['https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80'],
+    images: ['https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=85'],
   },
   robots: {
     index: true,
@@ -67,13 +74,11 @@ export const metadata = {
       'max-snippet': -1,
     },
   },
-  icons: {
-    icon: '/favicon.ico',
-  },
+  icons: { icon: '/favicon.ico' },
 };
 
 export const viewport = {
-  themeColor: '#050814',
+  themeColor: '#F5EFE3',
   width: 'device-width',
   initialScale: 1,
 };
@@ -121,7 +126,7 @@ const organizationJsonLd = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`dark ${inter.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable}`} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
@@ -130,9 +135,9 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
       </head>
-      <body className={`${inter.className} bg-[#050814] text-slate-100 antialiased`}>
+      <body className="bg-paper text-ink antialiased font-sans selection:bg-gold/30 selection:text-ink">
         {children}
-        <Toaster theme="dark" richColors position="top-center" />
+        <Toaster theme="light" richColors position="top-center" />
       </body>
     </html>
   );
