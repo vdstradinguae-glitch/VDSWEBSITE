@@ -40,6 +40,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'sonner';
+import GlobeHero from '@/components/GlobeHero';
 
 const AI_EXTERNAL_URL = 'https://www.talkbotagent.com';
 
@@ -306,66 +307,54 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        {/* Image collage */}
+        {/* 3D Interactive Globe with trade routes */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9 }}
+          transition={{ duration: 1, delay: 0.2 }}
           className="relative flex justify-center lg:justify-end"
         >
-          <div className="relative grid w-full max-w-[560px] grid-cols-5 grid-rows-6 gap-4">
-            <div className="relative col-span-3 row-span-4 overflow-hidden rounded-[2rem]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900&q=85"
-                alt="Aerial view of Dubai — VDS General Trading headquarters"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="relative col-span-2 row-span-3 col-start-4 overflow-hidden rounded-[2rem]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1605732562742-3023a888e56e?w=600&q=85"
-                alt="Shipping containers at Jebel Ali port"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="relative col-span-2 row-span-3 col-start-4 row-start-4 overflow-hidden rounded-[2rem] bg-navy-900 p-6 text-white">
-              <div className="flex h-full flex-col justify-between">
-                <div className="text-7xl font-extrabold leading-none">20<span className="text-accent">+</span></div>
-                <div>
-                  <div className="text-sm font-semibold">Countries Served</div>
-                  <div className="text-xs text-navy-300">GCC · Africa · CIS</div>
-                </div>
+          <div className="relative w-full max-w-[640px]">
+            <GlobeHero />
+
+            {/* Floating "UAE Registered LLC" badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.8 }}
+              className="absolute -left-2 top-8 z-10 hidden items-center gap-4 rounded-2xl bg-white p-4 shadow-2xl shadow-navy-900/15 ring-1 ring-navy-100 sm:flex"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/15 text-accent">
+                <Award className="h-5 w-5" />
               </div>
-              <div className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-accent/20 blur-2xl" />
-            </div>
-            <div className="relative col-span-3 row-span-2 row-start-5 overflow-hidden rounded-[2rem]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1597362925123-77861d3fbac7?w=700&q=85"
-                alt="Fresh agricultural produce for export"
-                className="h-full w-full object-cover"
-              />
+              <div>
+                <div className="text-[10px] uppercase tracking-mid text-navy-500">UAE</div>
+                <div className="text-base font-extrabold text-navy-900">Registered LLC</div>
+              </div>
+            </motion.div>
+
+            {/* Floating stat card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 1 }}
+              className="absolute -right-2 bottom-20 z-10 hidden rounded-2xl bg-navy-900 p-5 text-white shadow-2xl shadow-navy-900/30 sm:block"
+            >
+              <div className="text-4xl font-extrabold leading-none">
+                20<span className="text-accent">+</span>
+              </div>
+              <div className="mt-2 text-[11px] uppercase tracking-mid text-navy-300">
+                Active Markets
+              </div>
+              <div className="text-[11px] text-navy-400">GCC · Africa · CIS</div>
+            </motion.div>
+
+            {/* "Drag to rotate" hint */}
+            <div className="pointer-events-none absolute right-4 top-4 hidden items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-bold uppercase tracking-mid text-navy-600 shadow-sm ring-1 ring-navy-100 sm:flex">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
+              Drag to rotate
             </div>
           </div>
-
-          {/* Floating badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.4 }}
-            className="absolute -left-6 bottom-12 hidden rounded-2xl bg-white p-5 shadow-2xl shadow-navy-900/10 ring-1 ring-navy-100 sm:flex sm:items-center sm:gap-4"
-          >
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent/15 text-accent">
-              <Award className="h-6 w-6" />
-            </div>
-            <div>
-              <div className="text-[11px] uppercase tracking-mid text-navy-500">UAE</div>
-              <div className="text-lg font-bold text-navy-900">Registered LLC</div>
-              <div className="text-xs text-navy-500">Dubai · UAE</div>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </section>
