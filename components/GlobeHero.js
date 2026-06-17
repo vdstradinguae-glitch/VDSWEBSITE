@@ -20,26 +20,32 @@ const DUBAI = { lat: 25.2048, lng: 55.2708, name: 'Dubai · HQ' };
 
 // Target markets (active trade corridors)
 const MARKETS = [
+  // GCC
   { lat: 24.7136, lng: 46.6753, name: 'Riyadh', region: 'GCC' },
   { lat: 25.2854, lng: 51.531, name: 'Doha', region: 'GCC' },
   { lat: 29.3759, lng: 47.9774, name: 'Kuwait City', region: 'GCC' },
   { lat: 23.5859, lng: 58.4059, name: 'Muscat', region: 'GCC' },
   { lat: 26.2235, lng: 50.5876, name: 'Manama', region: 'GCC' },
-  { lat: -1.2921, lng: 36.8219, name: 'Nairobi', region: 'Africa' },
-  { lat: 6.5244, lng: 3.3792, name: 'Lagos', region: 'Africa' },
-  { lat: 9.032, lng: 38.7469, name: 'Addis Ababa', region: 'Africa' },
-  { lat: 14.6928, lng: -17.4467, name: 'Dakar', region: 'Africa' },
-  { lat: 30.0444, lng: 31.2357, name: 'Cairo', region: 'Africa' },
-  { lat: 19.076, lng: 72.8777, name: 'Mumbai', region: 'South Asia' },
-  { lat: 23.8103, lng: 90.4125, name: 'Dhaka', region: 'South Asia' },
-  { lat: 13.0827, lng: 80.2707, name: 'Chennai', region: 'South Asia' },
-  { lat: 6.9271, lng: 79.8612, name: 'Colombo', region: 'South Asia' },
+  // Europe
+  { lat: 51.5074, lng: -0.1278, name: 'London', region: 'Europe' },
+  { lat: 48.8566, lng: 2.3522, name: 'Paris', region: 'Europe' },
+  { lat: 52.52, lng: 13.405, name: 'Berlin', region: 'Europe' },
+  { lat: 52.3676, lng: 4.9041, name: 'Amsterdam', region: 'Europe' },
+  { lat: 50.1109, lng: 8.6821, name: 'Frankfurt', region: 'Europe' },
+  { lat: 40.4168, lng: -3.7038, name: 'Madrid', region: 'Europe' },
+  { lat: 41.9028, lng: 12.4964, name: 'Rome', region: 'Europe' },
+  // United States
+  { lat: 40.7128, lng: -74.006, name: 'New York', region: 'US' },
+  { lat: 34.0522, lng: -118.2437, name: 'Los Angeles', region: 'US' },
+  { lat: 29.7604, lng: -95.3698, name: 'Houston', region: 'US' },
+  { lat: 25.7617, lng: -80.1918, name: 'Miami', region: 'US' },
+  { lat: 41.8781, lng: -87.6298, name: 'Chicago', region: 'US' },
 ];
 
 const REGION_COLOR = {
   GCC: '#F59E0B',
-  Africa: '#10B981',
-  'South Asia': '#22D3EE',
+  Europe: '#3B82F6',
+  US: '#10B981',
 };
 
 const GlobeHero = () => {
@@ -169,9 +175,9 @@ const GlobeHero = () => {
       <div className="pointer-events-none absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 items-center gap-4 rounded-full bg-white/95 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-mid text-navy-700 shadow-xl ring-1 ring-navy-100 backdrop-blur sm:bottom-6">
         <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-accent" /> GCC</span>
         <span className="h-3 w-px bg-navy-200" />
-        <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Africa</span>
+        <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-blue-500" /> Europe</span>
         <span className="h-3 w-px bg-navy-200" />
-        <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-cyan-400" /> Asia</span>
+        <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" /> US</span>
       </div>
     </div>
   );

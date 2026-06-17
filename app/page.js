@@ -278,7 +278,7 @@ const Hero = () => {
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-navy-600">
             From wholesale agricultural commodities and MOHAP-compliant medical equipment
             to AI-powered automation agents — VDS General Trading LLC connects producers,
-            hospitals and enterprises across the GCC, Africa and South Asia.
+            hospitals and enterprises across the UAE, GCC, Europe and the United States.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -348,7 +348,7 @@ const Hero = () => {
               <div className="mt-2 text-[11px] uppercase tracking-mid text-navy-300">
                 Active Markets
               </div>
-              <div className="text-[11px] text-navy-400">GCC · Africa · South Asia</div>
+              <div className="text-[11px] text-navy-400">UAE · GCC · Europe · US</div>
             </motion.div>
 
             {/* "Drag to rotate" hint */}
@@ -466,7 +466,7 @@ const Verticals = () => {
       key: 'agro',
       icon: Sprout,
       title: 'Agro Trading',
-      desc: 'Wholesale and re-export of onion, potato, garlic and broader agricultural commodities to the GCC, Africa and South Asia markets.',
+      desc: 'Wholesale and re-export of onion, potato, garlic and broader agricultural commodities to the UAE, GCC, Europe and United States markets.',
       href: '#agro',
       external: false,
     },
@@ -598,7 +598,7 @@ const Process = () => {
   const steps = [
     { icon: Search, n: '01', t: 'Inquiry & Discovery', d: 'Tell us your requirement, target market, volume and timeline. We respond in 24h.' },
     { icon: Boxes, n: '02', t: 'Sourcing & Compliance', d: 'We source, grade, document and clear — agro produce or medical equipment.' },
-    { icon: Ship, n: '03', t: 'Delivery & Re-Export', d: 'Consolidation through Jebel Ali, shipped to GCC, Africa or South Asia destinations.' },
+    { icon: Ship, n: '03', t: 'Delivery & Re-Export', d: 'Consolidation through Jebel Ali, shipped to UAE, GCC, Europe or United States destinations.' },
   ];
   return (
     <section className="bg-offwhite py-24 lg:py-32">
@@ -638,7 +638,7 @@ const Process = () => {
    ========================================================= */
 const AgroDetail = () => {
   const products = ['Onion', 'Potato', 'Garlic', 'Ginger', 'Pulses', 'Spices', 'Fresh Produce', 'Dry Grocery'];
-  const markets = ['GCC', 'East Africa', 'West Africa', 'South Asia'];
+  const markets = ['UAE', 'GCC', 'Europe', 'United States'];
   return (
     <section id="agro" className="scroll-mt-24 bg-white py-24 lg:py-32">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
@@ -806,14 +806,14 @@ const Markets = () => {
     'Kuwait',
     'Qatar',
     'Bahrain',
-    'Kenya',
-    'Nigeria',
-    'Ethiopia',
-    'Senegal',
-    'India',
-    'Bangladesh',
-    'Sri Lanka',
-    'Egypt',
+    'United States',
+    'United Kingdom',
+    'Germany',
+    'France',
+    'Netherlands',
+    'Italy',
+    'Spain',
+    'Belgium',
   ];
   return (
     <section className="border-y border-navy-100 bg-white py-12">
@@ -858,9 +858,9 @@ const WhyVDS = () => {
       tag: 'Scale',
       title: 'Tri-Continental Reach',
       bullets: [
-        'Active GCC corridors',
-        'East & West Africa',
-        'South Asia trade lanes',
+        'UAE & GCC corridors',
+        'European trade lanes',
+        'United States flows',
         'Direct & FOB origins',
         'Jebel Ali consolidation',
       ],
@@ -963,11 +963,11 @@ const Testimonials = () => {
         'Their MOHAP documentation discipline is exactly what a hospital chain needs. We expanded our patient-monitoring fleet through VDS with full traceability — and zero compliance friction.',
     },
     {
-      name: 'Mahesh Iyer',
-      role: 'Director · Agro Importers, Mumbai',
+      name: 'James Whitmore',
+      role: 'Procurement Lead · Wholesale Importers, London',
       img: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&q=85',
       quote:
-        'Reliable container flow into South Asia is rare. VDS treats every shipment as accountable — consistent grading, on-time delivery, and that is why we keep coming back.',
+        'Reliable container flow into Europe is rare. VDS treats every shipment as accountable — consistent grading, on-time delivery, and that is why we keep coming back.',
     },
   ];
   const [idx, setIdx] = useState(0);
@@ -1268,7 +1268,7 @@ const Footer = () => {
             </a>
             <p className="mt-6 max-w-sm text-sm text-navy-300">
               A UAE-registered Dubai trading house — building dependable trade corridors
-              across the GCC, Africa and South Asia, across three carefully chosen
+              across the UAE, GCC, Europe and the United States, across three carefully chosen
               verticals.
             </p>
             <div className="mt-6 flex items-center gap-3">
