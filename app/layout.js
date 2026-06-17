@@ -18,7 +18,7 @@ export const metadata = {
     template: '%s | VDS General Trading LLC',
   },
   description:
-    'VDS General Trading LLC is a Dubai-based UAE-registered company specializing in wholesale agro commodity trading (onion, potato, garlic), MOHAP-compliant medical equipment supply, and AI voice & email automation agents. Serving GCC, Africa & CIS markets.',
+    'VDS General Trading LLC is a Dubai-based UAE-registered company specializing in wholesale agro commodity trading (onion, potato, garlic), MOHAP-compliant medical equipment supply, and AI voice & email automation agents. Serving GCC, Africa & South Asia markets.',
   keywords: [
     'VDS General Trading',
     'medical equipment supplier UAE',
@@ -28,7 +28,7 @@ export const metadata = {
     'wholesale onion exporter Dubai',
     'MOHAP medical equipment',
     'GCC trading company',
-    'Africa CIS re-export Dubai',
+    'Africa South Asia re-export Dubai',
   ],
   authors: [{ name: 'VDS General Trading LLC' }],
   creator: 'VDS General Trading LLC',
@@ -93,7 +93,7 @@ const organizationJsonLd = {
           telephone: '+971-54-269-5401',
           email: 'sales@vdsdxb.ae',
           contactType: 'sales',
-          areaServed: ['AE', 'GCC', 'Africa', 'CIS'],
+          areaServed: ['AE', 'GCC', 'Africa', 'South Asia'],
           availableLanguage: ['English', 'Arabic'],
         },
       ],
@@ -113,7 +113,7 @@ const organizationJsonLd = {
         addressRegion: 'Dubai',
         addressCountry: 'AE',
       },
-      areaServed: ['United Arab Emirates', 'GCC', 'Africa', 'CIS'],
+      areaServed: ['United Arab Emirates', 'GCC', 'Africa', 'South Asia'],
     },
   ],
 };

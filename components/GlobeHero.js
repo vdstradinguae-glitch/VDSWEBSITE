@@ -30,17 +30,15 @@ const MARKETS = [
   { lat: 9.032, lng: 38.7469, name: 'Addis Ababa', region: 'Africa' },
   { lat: 14.6928, lng: -17.4467, name: 'Dakar', region: 'Africa' },
   { lat: 30.0444, lng: 31.2357, name: 'Cairo', region: 'Africa' },
-  { lat: 55.7558, lng: 37.6173, name: 'Moscow', region: 'CIS' },
-  { lat: 43.2389, lng: 76.8897, name: 'Almaty', region: 'CIS' },
-  { lat: 41.2995, lng: 69.2401, name: 'Tashkent', region: 'CIS' },
   { lat: 19.076, lng: 72.8777, name: 'Mumbai', region: 'South Asia' },
   { lat: 23.8103, lng: 90.4125, name: 'Dhaka', region: 'South Asia' },
+  { lat: 13.0827, lng: 80.2707, name: 'Chennai', region: 'South Asia' },
+  { lat: 6.9271, lng: 79.8612, name: 'Colombo', region: 'South Asia' },
 ];
 
 const REGION_COLOR = {
   GCC: '#F59E0B',
   Africa: '#10B981',
-  CIS: '#8B5CF6',
   'South Asia': '#22D3EE',
 };
 
@@ -172,8 +170,6 @@ const GlobeHero = () => {
         <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-accent" /> GCC</span>
         <span className="h-3 w-px bg-navy-200" />
         <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Africa</span>
-        <span className="h-3 w-px bg-navy-200" />
-        <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-violet-500" /> CIS</span>
         <span className="h-3 w-px bg-navy-200" />
         <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-cyan-400" /> Asia</span>
       </div>
