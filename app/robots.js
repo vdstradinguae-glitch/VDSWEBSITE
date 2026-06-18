@@ -1,9 +1,15 @@
-const SITE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://vdsdxb.ae';
+const SITE_URL = 'https://vdsdxb.ae';
 
 export default function robots() {
   return {
-    rules: [{ userAgent: '*', allow: '/' }],
+    rules: [
+      { userAgent: '*', allow: '/' },
+      // Allow major AI crawlers explicitly
+      { userAgent: 'GPTBot', allow: '/' },
+      { userAgent: 'Claude-Web', allow: '/' },
+      { userAgent: 'PerplexityBot', allow: '/' },
+      { userAgent: 'Googlebot', allow: '/' },
+    ],
     sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
   };
 }

@@ -90,11 +90,12 @@ const Nav = () => {
   }, []);
 
   const links = [
-    { href: '#about', label: 'About' },
-    { href: '#verticals', label: 'Verticals' },
-    { href: '#agro', label: 'Agro' },
-    { href: '#healthcare', label: 'Healthcare' },
-    { href: AI_EXTERNAL_URL, label: 'AI Agents', external: true },
+    { href: '/about', label: 'About' },
+    { href: '#verticals', label: 'Services' },
+    { href: '/agro-trading', label: 'Agro' },
+    { href: '/healthcare-equipment', label: 'Healthcare' },
+    { href: '/ai-automation', label: 'AI Agents' },
+    { href: '/digital-marketing', label: 'Digital Marketing' },
     { href: '#contact', label: 'Contact' },
   ];
 
@@ -270,15 +271,13 @@ const Hero = () => {
           transition={{ duration: 0.7 }}
           className="relative"
         >
-          <Eyebrow>Trading Excellence Since Dubai</Eyebrow>
+          <Eyebrow>AI Automation &amp; Trading — Dubai, UAE</Eyebrow>
           <h1 className="mt-6 text-[clamp(2.5rem,6vw,5rem)] font-extrabold leading-[1.02] text-navy-900 text-spread">
-            Trading <span className="text-accent">Excellence</span>
-            <br /> Across Continents
+            AI Automation <span className="text-accent">&amp; Digital</span>
+            <br /> Marketing Dubai
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-navy-600">
-            From wholesale agricultural commodities and MOHAP-compliant medical equipment
-            to AI-powered automation agents — VDS General Trading LLC connects producers,
-            hospitals and enterprises across the UAE, GCC, Europe and the United States.
+            VDS General Trading LLC is a Dubai-based UAE-registered company delivering AI voice automation agents, SEO &amp; digital marketing (GEO/AEO), agro commodity trading, and MOHAP-compliant medical equipment — across the UAE, GCC, MENA, Europe and United States.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -463,35 +462,43 @@ const About = () => {
 const Verticals = () => {
   const items = [
     {
+      key: 'ai',
+      icon: Bot,
+      title: 'AI Voice & Automation',
+      desc: 'AI-powered voice and email automation agents that handle your inbound calls, leads and customer operations 24/7 — for UAE businesses.',
+      href: '/ai-automation',
+      external: false,
+    },
+    {
+      key: 'digital',
+      icon: Search,
+      title: 'Digital Marketing (SEO · GEO · AEO)',
+      desc: 'Full-service digital marketing in Dubai: SEO, Generative Engine Optimisation (GEO), Answer Engine Optimisation (AEO), PPC and social media — rank #1 on Google, AI tools and voice search.',
+      href: '/digital-marketing',
+      external: false,
+    },
+    {
       key: 'agro',
       icon: Sprout,
       title: 'Agro Trading',
-      desc: 'Wholesale and re-export of onion, potato, garlic and broader agricultural commodities to the UAE, GCC, Europe and United States markets.',
-      href: '#agro',
+      desc: 'Wholesale and re-export of onion, potato, garlic and broader agricultural commodities to UAE, GCC, Europe and United States markets via Jebel Ali.',
+      href: '/agro-trading',
       external: false,
     },
     {
       key: 'healthcare',
       icon: HeartPulse,
       title: 'Healthcare Equipment',
-      desc: 'MOHAP-compliant medical equipment trading and distribution to hospitals, clinics and medical distributors across the UAE.',
-      href: '#healthcare',
+      desc: 'MOHAP-compliant medical equipment trading, rental and distribution to hospitals, clinics and medical distributors across the UAE and GCC.',
+      href: '/healthcare-equipment',
       external: false,
-    },
-    {
-      key: 'ai',
-      icon: Bot,
-      title: 'AI Agents & Automation',
-      desc: 'AI-powered voice and email automation that runs your inbound calls, leads and customer operations — 24/7.',
-      href: AI_EXTERNAL_URL,
-      external: true,
     },
   ];
 
   return (
     <section id="verticals" className="bg-white py-24 lg:py-32">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-        <SectionTitle eyebrow="Our Verticals" title="Three pillars," accent="one trusted partner." center />
+        <SectionTitle eyebrow="Our Services" title="Four verticals," accent="one trusted partner." center />
         <p className="mx-auto mt-5 max-w-2xl text-center text-base text-navy-500">
           Each vertical operates with its own dedicated team — while sharing the same UAE
           governance, logistics network and global reach.

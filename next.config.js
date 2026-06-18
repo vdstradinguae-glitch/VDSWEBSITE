@@ -1,38 +1,43 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
   images: {
-    unoptimized: true,
-  },
-  experimental: {
-    // Remove if not using Server Components
-    serverComponentsExternalPackages: ['mongodb'],
-  },
-  webpack(config, { dev }) {
-    if (dev) {
-      // Reduce CPU/memory from file watching
-      config.watchOptions = {
-        poll: 2000, // check every 2 seconds
-        aggregateTimeout: 300, // wait before rebuilding
-        ignored: ['**/node_modules'],
-      };
-    }
-    return config;
-  },
-  onDemandEntries: {
-    maxInactiveAge: 10000,
-    pagesBufferLength: 2,
+    // Enable Next.js image optimisation
+    domains: ['images.unsplash.com'],
+    formats: ['image/avif', 'image/webp'],
   },
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: '/(.*)',
         headers: [
-          { key: "X-Frame-Options", value: "ALLOWALL" },
-          { key: "Content-Security-Policy", value: "frame-ancestors *;" },
-          { key: "Access-Control-Allow-Origin", value: process.env.CORS_ORIGINS || "*" },
-          { key: "Access-Control-Allow-Methods", value: "GET, POST, PUT, DELETE, OPTIONS" },
-          { key: "Access-Control-Allow-Headers", value: "*" },
+          // Security
+          { key: 'X-Frame-Options',           value: 'SAMEORIGIN' },
+          { key: 'X-Content-Type-Options',     value: 'nosniff' },
+          { key: 'Referrer-Policy',            value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy',         value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'Content-Security-Policy',    value: "frame-ancestors 'self'" },
+          // Performance
+          { key: 'X-DNS-Prefetch-Control',     value: 'on' },
         ],
+      },
+      // Cache static assets
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      // Redirect legacy anchor links to new sub-pages
+      {
+        source: '/',
+        has: [{ type: 'query', key: 'section', value: 'agro' }],
+        destination: '/agro-trading',
+        permanent: true,
       },
     ];
   },
