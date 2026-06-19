@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'MOHAP Medical Equipment Supplier UAE | Healthcare Equipment Rental Dubai',
+  title: 'MOHAP Medical Equipment Supplier UAE',
   description:
-    'MOHAP-compliant medical equipment trading, rental and supply to UAE hospitals, clinics and distributors. Diagnostic equipment, patient monitoring, surgical instruments. VDS General Trading LLC Dubai.',
+    'MOHAP-compliant medical equipment trading & rental to UAE hospitals, clinics and distributors. Diagnostic, surgical, monitoring, imaging & lab equipment.',
   alternates: { canonical: 'https://vdsdxb.ae/healthcare-equipment' },
   openGraph: {
     title: 'MOHAP Medical Equipment Supplier UAE | Healthcare Equipment Dubai',

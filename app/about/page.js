@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'About VDS General Trading LLC | UAE Trading Company Dubai',
+  title: 'About VDS General Trading Dubai',
   description:
-    'About VDS General Trading LLC — a UAE-registered Dubai trading company specialising in AI automation, digital marketing, agro commodity trading and MOHAP medical equipment. Learn about our mission and team.',
+    'About VDS General Trading LLC — UAE-registered Dubai company in AI automation, digital marketing, agro commodities and MOHAP medical equipment.',
   alternates: { canonical: 'https://vdsdxb.ae/about' },
   openGraph: {
-    title: 'About VDS General Trading LLC | UAE Trading Company Dubai',
+    title: 'About VDS General Trading Dubai',
     description: 'UAE-registered Dubai trading company. AI automation, digital marketing, agro commodities and medical equipment. Serving UAE, GCC, MENA, US.',
     url: 'https://vdsdxb.ae/about',
   },

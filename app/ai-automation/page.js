@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'AI Voice Automation Agents Dubai UAE | VDS General Trading',
+  title: 'AI Voice Automation Agents Dubai UAE',
   description:
-    'AI voice and email automation agents for UAE businesses. 24/7 inbound call handling, lead qualification, customer operations — by VDS General Trading LLC Dubai.',
+    'AI voice and email automation agents for UAE businesses. 24/7 call handling, lead qualification and customer operations — by VDS Trading Dubai.',
   alternates: { canonical: 'https://vdsdxb.ae/ai-automation' },
   openGraph: {
-    title: 'AI Voice Automation Agents Dubai UAE | VDS General Trading',
+    title: 'AI Voice Automation Agents Dubai UAE',
     description: 'AI-powered voice and email automation for UAE businesses. Handle inbound calls, qualify leads and run customer operations 24/7.',
     url: 'https://vdsdxb.ae/ai-automation',
   },

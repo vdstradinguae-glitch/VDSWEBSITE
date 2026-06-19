@@ -15,11 +15,11 @@ const SITE_URL = 'https://vdsdxb.ae';
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'VDS General Trading LLC | AI Automation, Digital Marketing & Trading — Dubai UAE',
-    template: '%s | VDS General Trading LLC Dubai',
+    default: 'VDS General Trading | AI Automation & Trading Dubai',
+    template: '%s | VDS',
   },
   description:
-    'Dubai-based UAE trading company: AI voice automation agents, SEO & digital marketing, agro commodity trading, and MOHAP-compliant medical equipment. Serving UAE, GCC, MENA, US.',
+    'Dubai-based UAE trading company: AI automation agents, SEO & digital marketing, agro commodities and MOHAP medical equipment. Serving UAE, GCC & US.',
   keywords: [
     'AI voice automation UAE',
     'AI agents Dubai',
@@ -46,7 +46,7 @@ export const metadata = {
     locale: 'en_AE',
     url: SITE_URL,
     siteName: 'VDS General Trading LLC',
-    title: 'VDS General Trading LLC | AI Automation & Trading — Dubai UAE',
+    title: 'VDS General Trading | AI Automation & Trading Dubai',
     description:
       'UAE-registered Dubai company: AI voice agents, digital marketing (SEO/GEO/AEO), agro commodity trading & MOHAP medical equipment. Serving UAE, GCC, MENA & US.',
     images: [
@@ -60,7 +60,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'VDS General Trading LLC | AI Automation & Trading — Dubai UAE',
+    title: 'VDS General Trading | AI Automation & Trading Dubai',
     description:
       'AI automation, SEO/GEO/AEO digital marketing, agro commodities & medical equipment. UAE-registered. Serving UAE, GCC, MENA & US.',
     images: ['https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=85'],

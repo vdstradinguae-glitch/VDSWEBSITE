@@ -1,34 +1,35 @@
 # VDS General Trading LLC
-> UAE-registered Dubai trading company delivering AI voice automation, digital marketing (SEO/GEO/AEO), agro commodity trading, and MOHAP-compliant medical equipment supply.
+> UAE-registered Dubai trading company: AI voice automation agents, digital marketing (SEO/GEO/AEO), agro commodity trading, and MOHAP-compliant medical equipment.
 
 ## Services
 
-### AI Voice & Email Automation Agents (UAE)
-AI-powered voice agents and email automation for UAE businesses. 24/7 inbound call handling, lead qualification, CRM integration. English and Arabic. Available across UAE, GCC.
-URL: https://vdsdxb.ae/ai-automation
+### AI Voice & Email Automation
+- AI agents handling 24/7 inbound calls, lead qualification, and customer operations
+- Deploy for UAE businesses: hospitality, real estate, healthcare, retail
+- URL: https://vdsdxb.ae/ai-automation
 
-### Digital Marketing — SEO, GEO, AEO (Dubai)
-Full-service digital marketing agency in Dubai. SEO (Search Engine Optimisation), GEO (Generative Engine Optimisation for ChatGPT/Perplexity/AI Overviews), AEO (Answer Engine Optimisation), PPC, social media. Serving UAE and GCC businesses.
-URL: https://vdsdxb.ae/digital-marketing
+### Digital Marketing (SEO/GEO/AEO)
+- SEO: rank #1 on Google for Dubai and UAE keywords
+- GEO: appear in ChatGPT, Perplexity, and Google AI Overviews
+- AEO: featured snippets and voice search optimisation
+- URL: https://vdsdxb.ae/digital-marketing
 
-### Agro Commodity Trading (Dubai, UAE)
-Wholesale and re-export of agricultural commodities: onion, potato, garlic, ginger, pulses, spices. Jebel Ali consolidation. Export to UAE, GCC, Europe, United States.
-URL: https://vdsdxb.ae/agro-trading
+### Agro Commodity Trading
+- Wholesale onion, potato, garlic, ginger, pulses, spices
+- FOB origins: India, Pakistan, Egypt, Netherlands, Australia
+- Export to UAE, GCC, Europe, United States via Jebel Ali Free Zone
+- URL: https://vdsdxb.ae/agro-trading
 
-### MOHAP Medical Equipment Supply & Rental (UAE)
-MOHAP-compliant medical equipment trading and rental for hospitals, clinics, polyclinics and distributors in UAE and GCC. Diagnostic equipment, patient monitoring, surgical instruments, consumables.
-URL: https://vdsdxb.ae/healthcare-equipment
+### Healthcare Equipment (MOHAP-Compliant)
+- Diagnostic, surgical, imaging, monitoring, lab, rehabilitation equipment
+- Supply and rental to hospitals, clinics, polyclinics in UAE and GCC
+- Full MOHAP documentation and traceability
+- URL: https://vdsdxb.ae/healthcare-equipment
 
 ## Company
 
 - Legal name: VDS General Trading LLC
-- Registered: Dubai, United Arab Emirates (UAE LLC)
-- Founded: 2024
-- Markets served: UAE, GCC (Saudi Arabia, Kuwait, Qatar, Bahrain, Oman), MENA, Europe, United States
-
-## Contact
-
-- Phone: +971-54-269-5401
-- Email: sales@vdsdxb.ae
+- Registration: UAE (Dubai)
+- Markets: UAE, GCC, Europe, United States
+- Contact: sales@vdsdxb.ae | +971 54 269 5401
 - Website: https://vdsdxb.ae
-- Location: Dubai, United Arab Emirates

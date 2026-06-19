@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Digital Marketing Agency Dubai | SEO, GEO, AEO Services UAE',
+  title: 'Digital Marketing Agency Dubai | SEO GEO AEO',
   description:
-    'Top digital marketing agency in Dubai offering SEO, Generative Engine Optimisation (GEO), Answer Engine Optimisation (AEO), PPC and social media. Rank #1 on Google, ChatGPT & voice search in UAE.',
+    'Dubai digital marketing agency: SEO, GEO (AI search visibility), AEO (featured snippets), PPC & social. Rank #1 on Google, ChatGPT & voice search in UAE.',
   alternates: { canonical: 'https://vdsdxb.ae/digital-marketing' },
   openGraph: {
     title: 'Digital Marketing Agency Dubai | SEO, GEO, AEO UAE',

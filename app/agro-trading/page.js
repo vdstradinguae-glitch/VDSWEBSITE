@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Agro Commodity Trading Dubai | Wholesale Onion Potato Garlic Export UAE',
+  title: 'Wholesale Agro Commodity Trading Dubai',
   description:
-    'Wholesale agro commodity trading and export from Dubai. Onion, potato, garlic, ginger, pulses and spices to UAE, GCC, Europe and US. Jebel Ali consolidation. MOHAP-compliant. VDS General Trading LLC.',
+    'Wholesale agro commodity trading from Dubai: onion, potato, garlic, ginger, pulses & spices to UAE, GCC, Europe & US via Jebel Ali consolidation.',
   alternates: { canonical: 'https://vdsdxb.ae/agro-trading' },
   openGraph: {
-    title: 'Agro Commodity Trading Dubai | Wholesale Onion Potato Garlic Export UAE',
+    title: 'Wholesale Agro Commodity Trading Dubai',
     description: 'Wholesale agro commodity trading from Dubai to UAE, GCC, Europe & US. Onion, potato, garlic, ginger, pulses via Jebel Ali. VDS General Trading LLC.',
     url: 'https://vdsdxb.ae/agro-trading',
   },
