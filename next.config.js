@@ -32,6 +32,13 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // www → apex 301 redirect (Next.js level, belt-and-suspenders)
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.vdsdxb.ae' }],
+        destination: 'https://vdsdxb.ae/:path*',
+        statusCode: 301,
+      },
       // Redirect legacy anchor links to new sub-pages
       {
         source: '/',
